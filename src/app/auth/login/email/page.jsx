@@ -44,21 +44,25 @@ export default function LoginEmail() {
   };
 
   return (
-    <PageTransition variant="slide-left" className="items-center justify-center">
+    <PageTransition variant="slide-left" className="flex flex-col h-full w-full relative">
       <BackgroundImage route="/auth/login/email" />
       <GoldWaveSVG speedMultiplier={0.8} density={2} />
 
-      <GlassCard className="max-w-md w-full relative z-10">
-        <StepIndicator currentStep={1} totalSteps={2} label="Sign In" />
+      <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
+        {/* Top/Left Title Region */}
+        <div className="max-w-xl md:mb-12">
+          <StepIndicator currentStep={1} totalSteps={2} label="Sign In" />
+          <h2 className="font-serif text-4xl md:text-6xl text-white mb-4 tracking-wide drop-shadow-xl mt-4">
+            Welcome back
+          </h2>
+          <p className="text-zinc-300 text-sm md:text-base leading-relaxed drop-shadow-md">
+            Please enter your registered email address to access your creative studio.
+          </p>
+        </div>
 
-        <h2 className="font-serif text-2xl text-white mb-2 tracking-wide">
-          Welcome back
-        </h2>
-        <p className="text-zinc-400 text-xs mb-6 leading-relaxed">
-          Please enter your registered email address to access your creative studio.
-        </p>
-
-        <form onSubmit={handleNext}>
+        {/* Bottom/Right Input Region */}
+        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+          <form onSubmit={handleNext} className="flex flex-col gap-4">
           <AnimatedInput
             label="Email Address"
             type="email"
@@ -73,11 +77,11 @@ export default function LoginEmail() {
             error={error}
           />
 
-          <div className="flex gap-3 mt-6">
+          <div className="flex gap-3 mt-4">
             <Button
               variant="secondary"
               onClick={() => router.push('/auth')}
-              className="flex-1"
+              className="flex-1 bg-white/5 border border-white/10 hover:bg-white/10"
             >
               ← Cancel
             </Button>
@@ -91,6 +95,7 @@ export default function LoginEmail() {
           </div>
         </form>
       </GlassCard>
+      </div>
     </PageTransition>
   );
 }

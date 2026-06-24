@@ -32,22 +32,20 @@ export default function BackgroundImage({ route }) {
           <motion.div
             key={bgPath}
             initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 0.6, scale: 1.05, x: mouseX, y: mouseY }}
+            animate={{ opacity: 0.9, scale: 1.05, x: mouseX, y: mouseY }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ 
               opacity: { ease: [0.22, 1, 0.36, 1], duration: 1.2 },
               scale: { ease: [0.22, 1, 0.36, 1], duration: 1.2 }
             }}
             className="absolute -inset-10 bg-cover bg-center bg-no-repeat will-change-transform"
-            style={{ backgroundImage: `url(${bgPath})` }}
+            style={{ backgroundImage: `url("${bgPath}")` }}
           />
         )}
       </AnimatePresence>
       
-      {/* World-class dark luxurious vignettes */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-[#0a0a0f]/40" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0f] via-transparent to-[#0a0a0f]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,10,15,0.85)_100%)] mix-blend-multiply" />
+      {/* Subtle edge darkening, no heavy middle vignettes */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(5,5,8,0.7)_100%)] mix-blend-multiply" />
     </div>
   );
 }

@@ -69,21 +69,25 @@ export default function LoginPassword() {
   };
 
   return (
-    <PageTransition variant="dissolve" className="items-center justify-center">
+    <PageTransition variant="dissolve" className="flex flex-col h-full w-full relative">
       <BackgroundImage route="/auth/login/password" />
       <GoldWaveSVG speedMultiplier={0.8} density={2} />
 
-      <GlassCard className="max-w-md w-full relative z-10">
-        <StepIndicator currentStep={2} totalSteps={2} label="Sign In" />
+      <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
+        {/* Top/Left Title Region */}
+        <div className="max-w-xl md:mb-12">
+          <StepIndicator currentStep={2} totalSteps={2} label="Sign In" />
+          <h2 className="font-serif text-4xl md:text-6xl text-white mb-4 tracking-wide drop-shadow-xl mt-4">
+            Enter password
+          </h2>
+          <p className="text-zinc-300 text-sm md:text-base leading-relaxed drop-shadow-md">
+            Verify your identity as: <span className="text-white font-mono">{email}</span>
+          </p>
+        </div>
 
-        <h2 className="font-serif text-2xl text-white mb-2 tracking-wide">
-          Enter password
-        </h2>
-        <p className="text-zinc-400 text-xs mb-6 leading-relaxed">
-          Verify your identity as: <span className="text-white font-mono">{email}</span>
-        </p>
-
-        <form onSubmit={handleLogin}>
+        {/* Bottom/Right Input Region */}
+        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <AnimatedInput
             label="Password"
             type="password"
@@ -108,7 +112,7 @@ export default function LoginPassword() {
             <Button
               variant="secondary"
               onClick={() => router.push('/auth/login/email')}
-              className="flex-1"
+              className="flex-1 bg-white/5 border border-white/10 hover:bg-white/10"
               disabled={isSubmitting}
             >
               ← Back
@@ -123,6 +127,7 @@ export default function LoginPassword() {
           </div>
         </form>
       </GlassCard>
+      </div>
 
       {toastMessage && (
         <Toast

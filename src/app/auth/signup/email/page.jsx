@@ -41,21 +41,25 @@ export default function EmailStep() {
   };
 
   return (
-    <PageTransition variant="slide-right" className="items-center justify-center">
+    <PageTransition variant="slide-right" className="flex flex-col h-full w-full relative">
       <BackgroundImage route="/auth/signup/email" />
       <GoldWaveSVG speedMultiplier={0.8} density={2} />
 
-      <GlassCard className="max-w-md w-full relative z-10">
-        <StepIndicator currentStep={2} totalSteps={4} label="Create Account" />
+      <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
+        {/* Top/Left Title Region */}
+        <div className="max-w-xl md:mb-12">
+          <StepIndicator currentStep={2} totalSteps={4} label="Create Account" />
+          <h2 className="font-serif text-4xl md:text-6xl text-white mb-4 tracking-wide drop-shadow-xl mt-4">
+            Where should we reach you?
+          </h2>
+          <p className="text-zinc-300 text-sm md:text-base leading-relaxed drop-shadow-md">
+            Your email is used to log in, recover your password, and verify your account.
+          </p>
+        </div>
 
-        <h2 className="font-serif text-2xl text-white mb-2 tracking-wide">
-          Where should we reach you?
-        </h2>
-        <p className="text-zinc-400 text-xs mb-6 leading-relaxed">
-          Your email is used to log in, recover your password, and verify your account.
-        </p>
-
-        <form onSubmit={handleNext}>
+        {/* Bottom/Right Input Region */}
+        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+          <form onSubmit={handleNext} className="flex flex-col gap-4">
           <AnimatedInput
             label="Email Address"
             type="email"
@@ -70,11 +74,11 @@ export default function EmailStep() {
             error={error}
           />
 
-          <div className="flex gap-3 mt-6">
+          <div className="flex gap-3 mt-4">
             <Button
               variant="secondary"
               onClick={() => router.push('/auth/signup/username')}
-              className="flex-1"
+              className="flex-1 bg-white/5 border border-white/10 hover:bg-white/10"
             >
               ← Back
             </Button>
@@ -88,6 +92,7 @@ export default function EmailStep() {
           </div>
         </form>
       </GlassCard>
+      </div>
     </PageTransition>
   );
 }
