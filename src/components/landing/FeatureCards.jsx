@@ -1,6 +1,7 @@
 'use client';
 
 import GlassCard from '../ui/GlassCard';
+import { motion } from 'framer-motion';
 
 export default function FeatureCards() {
   const features = [
@@ -40,23 +41,40 @@ export default function FeatureCards() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } }
+          }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
           {features.map((feature, idx) => (
-            <GlassCard
+            <motion.div 
               key={idx}
-              className="flex flex-col gap-4 text-center items-center p-8 border border-gold-500/10 hover:border-gold-500/30 transition-all hover:scale-[1.01]"
-              hoverGlow
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { ease: [0.22, 1, 0.36, 1], duration: 0.6 } }
+              }}
             >
-              <div className="w-16 h-16 rounded-full bg-gold-950/20 border border-gold-500/20 flex items-center justify-center text-3xl mb-2 text-gold-400 shadow-[0_0_15px_rgba(188,124,10,0.1)]">
-                {feature.icon}
-              </div>
-              <h3 className="font-serif text-xl text-white tracking-wider">{feature.title}</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed max-w-xs">
-                {feature.description}
-              </p>
-            </GlassCard>
+              <GlassCard
+                animate={false} // Disable default glasscard animation so stagger controls it
+                className="flex flex-col gap-4 text-center items-center p-8 border border-gold-500/10 hover:border-gold-500/30 transition-all hover:scale-[1.02] hover:-translate-y-1 h-full"
+                hoverGlow
+              >
+                <div className="w-16 h-16 rounded-full bg-gold-950/20 border border-gold-500/20 flex items-center justify-center text-3xl mb-2 text-gold-400 shadow-[0_0_15px_rgba(188,124,10,0.1)]">
+                  {feature.icon}
+                </div>
+                <h3 className="font-serif text-xl text-white tracking-wider">{feature.title}</h3>
+                <p className="text-zinc-400 text-xs leading-relaxed max-w-xs">
+                  {feature.description}
+                </p>
+              </GlassCard>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

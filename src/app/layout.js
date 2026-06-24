@@ -2,6 +2,7 @@ import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Providers from "@/components/layout/Providers";
+import AmbientVisualizer from "@/components/ui/AmbientVisualizer";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -21,6 +22,9 @@ const jetbrains = JetBrains_Mono({
 export const metadata = {
   title: "Cadenza — AI Music Creation Platform",
   description: "A free-tier premium portfolio web product for AI-assisted music creation.",
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -31,6 +35,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
         <Providers>
+          <AmbientVisualizer />
           <Navbar />
           {children}
         </Providers>

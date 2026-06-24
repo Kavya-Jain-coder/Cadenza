@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Logo from '@/components/ui/Logo';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -31,15 +32,17 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="glass sticky top-0 left-0 right-0 z-40 border-b border-gold-500/10 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="font-serif text-xl tracking-wider text-white hover:text-gold-300 transition-colors flex items-center gap-2">
-              <span className="text-gold-400">✨</span> Cadenza
-            </Link>
-          </div>
+    <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 pointer-events-none flex justify-center">
+      <nav className="pointer-events-auto w-full max-w-5xl rounded-full border border-gold-500/20 bg-obsidian/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div className="px-4 sm:px-6">
+          <div className="flex items-center justify-between h-14">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Link href="/" className="font-serif text-xl tracking-wider text-white hover:text-gold-300 transition-colors flex items-center gap-3">
+                <Logo className="w-8 h-8" />
+                <span>Cadenza</span>
+              </Link>
+            </div>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-6">
@@ -168,5 +171,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </nav>
+    </div>
   );
 }
