@@ -11,6 +11,7 @@ import AnimatedInput from '@/components/ui/AnimatedInput';
 import Button from '@/components/ui/Button';
 import Toast from '@/components/ui/Toast';
 import PageTransition from '@/components/layout/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function LoginPassword() {
   const router = useRouter();
@@ -74,7 +75,12 @@ export default function LoginPassword() {
 
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
-        <div className="max-w-xl md:mb-12">
+        <motion.div 
+          className="max-w-xl md:mb-12"
+          initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+          transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.2 }}
+        >
           <StepIndicator currentStep={2} totalSteps={2} label="Sign In" />
           <h2 className="font-serif text-4xl md:text-6xl text-white mb-4 tracking-wide drop-shadow-xl mt-4">
             Enter password
@@ -82,10 +88,16 @@ export default function LoginPassword() {
           <p className="text-zinc-300 text-sm md:text-base leading-relaxed drop-shadow-md">
             Verify your identity as: <span className="text-white font-mono">{email}</span>
           </p>
-        </div>
+        </motion.div>
 
         {/* Bottom/Right Input Region */}
-        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+        <motion.div
+          className="w-full max-w-sm md:mb-12"
+          initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.4 }}
+        >
+        <GlassCard className="w-full bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6" animate={false}>
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <AnimatedInput
             label="Password"
@@ -126,6 +138,7 @@ export default function LoginPassword() {
           </div>
         </form>
       </GlassCard>
+      </motion.div>
       </div>
 
       {toastMessage && (
