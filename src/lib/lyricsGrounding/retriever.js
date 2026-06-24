@@ -1,16 +1,13 @@
-export async function retrieveGroundingSnippets(supabase, { genre }) {
+import { getDb } from '@/lib/db';
+
+export async function retrieveGroundingSnippets({ genre }) {
   try {
-    const { data, error } = await supabase
-      .from('lyric_corpus')
-      .select('content, category')
-      .eq('genre', genre?.toLowerCase());
+    const sql = getDb();
+    const rows = await sql`
+      SELECT content, category FROM lyric_corpus WHERE genre = ${genre?.toLowerCase()}
+    `;
 
-    if (error) {
-      console.error('Error retrieving grounding snippets:', error.message);
-      return [];
-    }
-
-    return data || [];
+    return rows || [];
   } catch (err) {
     console.error('Unexpected retriever error:', err.message);
     return [];

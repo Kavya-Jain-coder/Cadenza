@@ -12,28 +12,19 @@ const GENRE_STEM_FALLBACKS = {
   jazz: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3'
 };
 
-export async function mockGenerateInstrumental({ supabase, genre, instruments }) {
-  const cleanGenre = genre?.toLowerCase() || 'pop';
-  
-  // 1. Attempt to resolve from Supabase Storage first (if files are uploaded)
-  // Folder format: stems/{genre}.mp3
-  const stemPath = `stems/${cleanGenre}.mp3`;
-  
-  const { data: publicUrlData } = supabase.storage
-    .from('audio-stems')
-    .getPublicUrl(stemPath);
-
-  // Check if file exists by head request, otherwise fallback
-  let audioUrl = publicUrlData?.publicUrl;
-
-  try {
-    const checkFile = await fetch(audioUrl, { method: 'HEAD' });
-    if (!checkFile.ok) {
-      audioUrl = GENRE_STEM_FALLBACKS[cleanGenre] || GENRE_STEM_FALLBACKS.pop;
-    }
-  } catch (e) {
-    audioUrl = GENRE_STEM_FALLBACKS[cleanGenre] || GENRE_STEM_FALLBACKS.pop;
+export async function mockGenerateInstrumental({ genre, instruments }) {
+  let index = 0;
+  if (instruments && instruments.length) {
+    index = instruments.map(i => i.name.charCodeAt(0)).reduce((a, b) => a + b, 0) % 8;
+  } else {
+    const cleanGenre = genre?.toLowerCase() || 'pop';
+    const genres = Object.keys(GENRE_STEM_FALLBACKS);
+    index = genres.indexOf(cleanGenre);
+    if (index === -1) index = 0;
   }
+  
+  const audioUrls = Object.values(GENRE_STEM_FALLBACKS);
+  const audioUrl = audioUrls[index];
 
   // Construct fake generation parameters
   const metadata = {

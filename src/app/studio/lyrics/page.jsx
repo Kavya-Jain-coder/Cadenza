@@ -11,6 +11,8 @@ import Button from '@/components/ui/Button';
 import AnimatedInput from '@/components/ui/AnimatedInput';
 import Toast from '@/components/ui/Toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
+import { saveAs } from 'file-saver';
 
 export default function LyricStudio() {
   const router = useRouter();
@@ -95,6 +97,55 @@ export default function LyricStudio() {
       updatedSections[sectionIdx].lines[lineIdx] = newValue;
       return { ...prev, sections: updatedSections };
     });
+  };
+
+  const handleDownloadDocx = async () => {
+    if (!generatedLyrics) return;
+
+    const children = [];
+    
+    children.push(
+      new Paragraph({
+        text: generatedLyrics.title || 'Untitled Creation',
+        heading: HeadingLevel.HEADING_1,
+        spacing: { after: 200 }
+      })
+    );
+
+    generatedLyrics.sections.forEach(section => {
+      children.push(
+        new Paragraph({
+          children: [
+            new TextRun({ text: section.label, bold: true, color: "888888" })
+          ],
+          spacing: { before: 200, after: 100 }
+        })
+      );
+
+      section.lines.forEach(line => {
+        children.push(
+          new Paragraph({
+            text: line,
+            spacing: { after: 50 }
+          })
+        );
+      });
+    });
+
+    const doc = new Document({
+      sections: [{ children }]
+    });
+
+    try {
+      const blob = await Packer.toBlob(doc);
+      saveAs(blob, `Cadenza_Lyrics_${(generatedLyrics.title || 'Untitled').replace(/\s+/g, '_')}.docx`);
+      setToastType('success');
+      setToastMessage('Lyrics Downloaded Successfully!');
+    } catch (e) {
+      console.error(e);
+      setToastType('error');
+      setToastMessage('Failed to create DOCX.');
+    }
   };
 
   // Easing presets
@@ -367,6 +418,13 @@ export default function LyricStudio() {
                       </h2>
                     </div>
                     <div className="flex gap-2">
+                      <Button
+                        variant="secondary"
+                        onClick={handleDownloadDocx}
+                        className="py-2 px-4"
+                      >
+                        📥 Download (.docx)
+                      </Button>
                       <Button
                         variant="secondary"
                         onClick={() => {

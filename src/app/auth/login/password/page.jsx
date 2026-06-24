@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { signIn } from 'next-auth/react';
 import BackgroundImage from '@/components/ui/BackgroundImage';
 import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
@@ -14,7 +14,6 @@ import PageTransition from '@/components/layout/PageTransition';
 
 export default function LoginPassword() {
   const router = useRouter();
-  const supabase = createClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,14 +35,15 @@ export default function LoginPassword() {
 
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const result = await signIn('credentials', {
         email,
-        password
+        password,
+        redirect: false
       });
 
-      if (error) {
+      if (result?.error) {
         setToastType('error');
-        setToastMessage(error.message);
+        setToastMessage('Invalid email or password. Please try again.');
         setIsSubmitting(false);
         return;
       }
@@ -63,29 +63,9 @@ export default function LoginPassword() {
     }
   };
 
-  const handleForgotPassword = async () => {
-    if (!email) {
-      setToastType('error');
-      setToastMessage('Email address not found. Please try again.');
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`
-      });
-
-      if (error) {
-        setToastType('error');
-        setToastMessage(error.message);
-      } else {
-        setToastType('success');
-        setToastMessage(`Password reset link sent to ${email}`);
-      }
-    } catch (err) {
-      setToastType('error');
-      setToastMessage('Unable to request password reset.');
-    }
+  const handleForgotPassword = () => {
+    setToastType('info');
+    setToastMessage('Password reset is coming soon. Please contact support for now.');
   };
 
   return (

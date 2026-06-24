@@ -1,6 +1,7 @@
 import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
+import Providers from "@/components/layout/Providers";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -29,8 +30,10 @@ export default function RootLayout({ children }) {
       className={`${playfair.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
-        <Navbar />
-        {children}
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   );

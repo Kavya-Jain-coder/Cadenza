@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { useSession } from 'next-auth/react';
 import { INSTRUMENTS } from '@/lib/constants';
 import BackgroundImage from '@/components/ui/BackgroundImage';
 import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
@@ -11,57 +11,81 @@ import Button from '@/components/ui/Button';
 import MockBadge from '@/components/ui/MockBadge';
 import WaveformVisualizer from '@/components/ui/WaveformVisualizer';
 import Toast from '@/components/ui/Toast';
+import { generateProceduralBeat } from '@/lib/audio/beatGenerator';
+import { audioBufferToMp3, fetchAndDecode } from '@/lib/audio/audioUtils';
+import { saveAs } from 'file-saver';
 
 function InstrumentalStudioContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = createClient();
+  const { data: session, status } = useSession();
   const preselectedLyricId = searchParams.get('lyricId');
+  const preselectedInstruments = searchParams.get('instruments');
+  const initialInstruments = preselectedInstruments ? preselectedInstruments.split(',').filter(Boolean) : [];
+  const initialSettings = {};
+  initialInstruments.forEach(id => {
+    initialSettings[id] = { quality: 'Standard', effect: 'None' };
+  });
 
   const [lyricsList, setLyricsList] = useState([]);
   const [selectedLyricId, setSelectedLyricId] = useState(preselectedLyricId || '');
   const [selectedGenre, setSelectedGenre] = useState('pop');
-  const [selectedInstruments, setSelectedInstruments] = useState([]);
-  const [instrumentSettings, setInstrumentSettings] = useState({});
+  const [selectedInstruments, setSelectedInstruments] = useState(initialInstruments);
+  const [instrumentSettings, setInstrumentSettings] = useState(initialSettings);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [result, setResult] = useState(null);
   
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
 
-  // Load lyrics on mount
+  // Redirect if not authenticated
   useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth');
+    }
+  }, [status, router]);
+
+  // Load lyrics on mount via API
+  useEffect(() => {
+    if (status !== 'authenticated') return;
+
     const fetchLyrics = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push('/auth');
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('lyrics')
-        .select('id, title, genre')
-        .order('created_at', { ascending: false });
-
-      if (error) {
+      try {
+        const res = await fetch('/api/creations');
+        if (res.status === 401) {
+          router.push('/auth');
+          return;
+        }
+        const data = await res.json();
+        if (data.error) {
+          setToastType('error');
+          setToastMessage('Failed to load lyrics history');
+        } else {
+          const lyricsData = (data.lyrics || []).map(l => ({
+            id: l.id,
+            title: l.title || 'Untitled',
+            genre: l.genre
+          }));
+          setLyricsList(lyricsData);
+          
+          // Auto-select first or preselected lyric genre
+          if (preselectedLyricId) {
+            const match = lyricsData.find((l) => l.id === preselectedLyricId);
+            if (match) setSelectedGenre(match.genre);
+          } else if (lyricsData.length > 0) {
+            setSelectedLyricId(lyricsData[0].id);
+            setSelectedGenre(lyricsData[0].genre);
+          }
+        }
+      } catch (e) {
         setToastType('error');
         setToastMessage('Failed to load lyrics history');
-      } else {
-        setLyricsList(data || []);
-        
-        // Auto-select first or preselected lyric genre
-        if (preselectedLyricId) {
-          const match = data.find((l) => l.id === preselectedLyricId);
-          if (match) setSelectedGenre(match.genre);
-        } else if (data.length > 0) {
-          setSelectedLyricId(data[0].id);
-          setSelectedGenre(data[0].genre);
-        }
       }
     };
 
     fetchLyrics();
-  }, [supabase, router, preselectedLyricId]);
+  }, [status, router, preselectedLyricId]);
 
   const handleLyricChange = (id) => {
     setSelectedLyricId(id);
@@ -116,13 +140,22 @@ function InstrumentalStudioContent() {
     }));
 
     try {
+      let audioDataUrl = null;
+      const provider = process.env.NEXT_PUBLIC_INSTRUMENTAL_PROVIDER;
+
+      if (provider === 'browser-synth') {
+        const synthResult = await generateProceduralBeat(selectedGenre, formattedInstruments);
+        audioDataUrl = synthResult.audioUrl;
+      }
+
       const res = await fetch('/api/instrumental/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           lyricId: selectedLyricId,
           genre: selectedGenre,
-          instruments: formattedInstruments
+          instruments: formattedInstruments,
+          audioDataUrl
         })
       });
 
@@ -138,6 +171,7 @@ function InstrumentalStudioContent() {
       setToastType('success');
       setToastMessage('Instrumental track composed successfully!');
     } catch (e) {
+      console.error('Procedural generation failed:', e);
       setToastType('error');
       setToastMessage('Failed to generate audio stems.');
     } finally {
@@ -290,7 +324,14 @@ function InstrumentalStudioContent() {
               <span className="text-[10px] tracking-widest font-mono text-gold-400 uppercase">
                 COMPOSER PREVIEW
               </span>
-              <MockBadge />
+              {process.env.NEXT_PUBLIC_INSTRUMENTAL_PROVIDER === 'browser-synth' ? (
+                <MockBadge 
+                  text="Procedural Synth" 
+                  tooltip="Generated client-side using Web Audio Synthesis. Fully customized and unique." 
+                />
+              ) : (
+                <MockBadge />
+              )}
             </div>
 
             {isGenerating && (
@@ -329,8 +370,32 @@ function InstrumentalStudioContent() {
 
                 <div className="flex gap-3 justify-end mt-2">
                   <Button
+                    variant="secondary"
+                    onClick={async () => {
+                      setIsDownloading(true);
+                      try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const buffer = await fetchAndDecode(result.audioUrl, audioCtx);
+                        const mp3Blob = audioBufferToMp3(buffer);
+                        saveAs(mp3Blob, `Cadenza_Beat_${result.id.substring(0, 8)}.mp3`);
+                        setToastType('success');
+                        setToastMessage('MP3 Downloaded Successfully!');
+                      } catch (e) {
+                        console.error(e);
+                        setToastType('error');
+                        setToastMessage('Failed to encode MP3.');
+                      } finally {
+                        setIsDownloading(false);
+                      }
+                    }}
+                    disabled={isDownloading}
+                    className="flex-1 text-center"
+                  >
+                    {isDownloading ? 'Encoding MP3...' : '📥 Download (.mp3)'}
+                  </Button>
+                  <Button
                     onClick={() => router.push(`/studio/voice?instrumentalId=${result.id}`)}
-                    className="w-full text-center"
+                    className="flex-1 text-center"
                   >
                     Proceed to Voice Studio →
                   </Button>
@@ -363,4 +428,3 @@ export default function InstrumentalStudio() {
     </Suspense>
   );
 }
-

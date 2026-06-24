@@ -21,11 +21,10 @@ export const ROUTE_BACKGROUNDS = {
   '/404':                      'cute-cat-indoors.jpg',
   '/loading':                  'cute-possum-wearing-clothes.jpg',
   '/empty-state':              'cute-possum-wearing-clothes (1).jpg',
-  // Reserved, unassigned:
-  // 'futuristic-musician-making-music-with-instrument (2).jpg'
-  // '3d-music-related-scene (1).jpg'
-  // '3d-music-related-scene (2).jpg'
-  // '3d-music-related-scene (3).jpg'
+  '/':                         'futuristic-musician-making-music-with-instrument (2).jpg',
+  '/about':                    '3d-music-related-scene (1).jpg',
+  '/pricing':                  '3d-music-related-scene (2).jpg',
+  '/profile':                  '3d-music-related-scene (3).jpg',
 };
 
 export function getBackground(route) {

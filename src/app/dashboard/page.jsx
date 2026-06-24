@@ -2,22 +2,30 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { useSession } from 'next-auth/react';
 import BackgroundImage from '@/components/ui/BackgroundImage';
 import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import EmptyState from '@/components/dashboard/EmptyState';
 import CreationCard from '@/components/dashboard/CreationCard';
+import VoiceCalibration from '@/components/ui/VoiceCalibration';
 import Toast from '@/components/ui/Toast';
 import { motion } from 'framer-motion';
 
 export default function Dashboard() {
   const router = useRouter();
-  const supabase = createClient();
+  const { data: session, status } = useSession();
   const [activeTab, setActiveTab] = useState('all'); // 'all' | 'lyrics' | 'instrumentals' | 'tracks'
   const [creations, setCreations] = useState({ lyrics: [], instrumentals: [], tracks: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth');
+    }
+  }, [status, router]);
 
   const fetchCreations = async () => {
     setIsLoading(true);
@@ -43,28 +51,21 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchCreations();
-  }, []);
+    if (status === 'authenticated') {
+      fetchCreations();
+    }
+  }, [status]);
 
   const handleDelete = async (id, type) => {
-    const tableMap = {
-      lyric: 'lyrics',
-      instrumental: 'instrumentals',
-      track: 'tracks'
-    };
-
-    const tableName = tableMap[type];
-    if (!tableName) return;
-
     try {
-      const { error } = await supabase
-        .from(tableName)
-        .delete()
-        .eq('id', id);
+      const res = await fetch(`/api/creations?id=${id}&type=${type}`, {
+        method: 'DELETE'
+      });
 
-      if (error) {
+      const data = await res.json();
+      if (data.error) {
         setToastType('error');
-        setToastMessage(error.message);
+        setToastMessage(data.error);
       } else {
         setToastType('success');
         setToastMessage('Item deleted successfully');
@@ -122,6 +123,11 @@ export default function Dashboard() {
           <h1 className="font-serif text-3xl md:text-4xl text-white tracking-wide">
             Your Sonic Catalog
           </h1>
+        </div>
+
+        {/* Voice Calibration Widget */}
+        <div className="mb-10">
+          <VoiceCalibration />
         </div>
 
         {isLoading ? (

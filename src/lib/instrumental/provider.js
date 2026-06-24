@@ -8,6 +8,17 @@ export async function generateInstrumental(params) {
     return await mockGenerateInstrumental(params);
   }
 
+  if (params.audioDataUrl || provider === 'browser-synth') {
+    return {
+      audioUrl: params.audioDataUrl || '',
+      metadata: {
+        generated_at: new Date().toISOString(),
+        provider: 'browser-synth',
+        instruments: params.instruments || []
+      }
+    };
+  }
+
   // Future integration of Stable Audio or MusicGen
   throw new Error(`Unsupported instrumental generator provider: ${provider}`);
 }

@@ -1,33 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { useSession, signOut } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = createClient();
-  const [user, setUser] = useState(null);
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
-    };
-    getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase]);
 
   // Hide Navbar in Auth routes
   if (pathname?.startsWith('/auth')) {
@@ -35,7 +18,7 @@ export default function Navbar() {
   }
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut({ redirect: false });
     router.push('/auth');
     router.refresh();
   };
@@ -85,10 +68,10 @@ export default function Navbar() {
 
           {/* Right Action buttons */}
           <div className="hidden md:flex items-center gap-4">
-            {user ? (
+            {session?.user ? (
               <div className="flex items-center gap-3">
                 <span className="text-[10px] tracking-wider font-mono text-zinc-500 lowercase">
-                  {user.email}
+                  {session.user.email}
                 </span>
                 <button
                   onClick={handleLogout}
@@ -155,10 +138,10 @@ export default function Navbar() {
                 );
               })}
               <div className="pt-4 border-t border-white/5 px-3 flex flex-col gap-2">
-                {user ? (
+                {session?.user ? (
                   <>
                     <div className="text-[10px] font-mono text-zinc-500 lowercase py-1">
-                      Logged in as: {user.email}
+                      Logged in as: {session.user.email}
                     </div>
                     <button
                       onClick={() => {

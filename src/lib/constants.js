@@ -43,3 +43,54 @@ export const TRANSITIONS = {
     duration: 0.25
   }
 };
+
+export const VOICE_EFFECTS_PRESETS = [
+  {
+    id: 'studio-warmth',
+    name: 'Studio Warmth',
+    icon: '🎙️',
+    reverbAmount: 0.25,
+    eqLow: 3,
+    eqMid: 1,
+    eqHigh: -2,
+    compression: true,
+    pitchShift: 0,
+    dryWet: 0.35
+  },
+  {
+    id: 'concert-hall',
+    name: 'Concert Hall',
+    icon: '🏛️',
+    reverbAmount: 0.7,
+    eqLow: -1,
+    eqMid: 2,
+    eqHigh: 3,
+    compression: true,
+    pitchShift: 0,
+    dryWet: 0.6
+  },
+  {
+    id: 'lofi-radio',
+    name: 'Lo-Fi Radio',
+    icon: '📻',
+    reverbAmount: 0.15,
+    eqLow: 4,
+    eqMid: -3,
+    eqHigh: -6,
+    compression: false,
+    pitchShift: 0,
+    dryWet: 0.2
+  },
+  {
+    id: 'raw-unprocessed',
+    name: 'Raw & Clean',
+    icon: '🔈',
+    reverbAmount: 0,
+    eqLow: 0,
+    eqMid: 0,
+    eqHigh: 0,
+    compression: false,
+    pitchShift: 0,
+    dryWet: 0
+  }
+];

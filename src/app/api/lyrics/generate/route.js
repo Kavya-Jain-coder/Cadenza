@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
+import { auth } from '@/lib/auth';
+import { getDb } from '@/lib/db';
 import { retrieveGroundingSnippets } from '@/lib/lyricsGrounding/retriever';
 import { buildSystemPrompt, buildUserPrompt } from '@/lib/llm/promptBuilder';
 import { generateLyrics } from '@/lib/llm/provider';
@@ -6,11 +7,9 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
-    const supabase = await createClient();
-
     // Authenticate user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized access' }, { status: 401 });
     }
 
@@ -23,7 +22,7 @@ export async function POST(request) {
     }
 
     // 1. Retrieve grounding snippets from database
-    const groundingSnippets = await retrieveGroundingSnippets(supabase, { genre });
+    const groundingSnippets = await retrieveGroundingSnippets({ genre });
 
     // 2. Build prompt
     const systemPrompt = buildSystemPrompt(groundingSnippets);
@@ -59,31 +58,22 @@ export async function POST(request) {
       }
     }
 
-    // 5. Persist to Supabase
-    const { data: insertedData, error: dbError } = await supabase
-      .from('lyrics')
-      .insert({
-        user_id: user.id,
-        language,
-        seed_phrase: seedPhrase,
-        genre,
-        mood,
-        tempo,
-        structure,
-        rhyme_density: rhymeDensity,
-        sections: parsedResult.sections || []
-      })
-      .select()
-      .single();
+    // 5. Persist to NeonDB
+    const sql = getDb();
+    const title = parsedResult.title || 'Untitled Creation';
+    const sections = JSON.stringify(parsedResult.sections || []);
 
-    if (dbError) {
-      console.error('Error inserting lyrics into DB:', dbError.message);
-      return NextResponse.json({ error: dbError.message }, { status: 500 });
-    }
+    const rows = await sql`
+      INSERT INTO lyrics (user_id, title, language, seed_phrase, genre, mood, tempo, structure, rhyme_density, sections)
+      VALUES (${session.user.id}, ${title}, ${language}, ${seedPhrase}, ${genre}, ${mood || null}, ${tempo || null}, ${structure || null}, ${rhymeDensity || null}, ${sections}::jsonb)
+      RETURNING id, title, sections
+    `;
+
+    const insertedData = rows[0];
 
     return NextResponse.json({
       id: insertedData.id,
-      title: parsedResult.title || 'Untitled Creation',
+      title: insertedData.title,
       sections: insertedData.sections
     });
   } catch (err) {

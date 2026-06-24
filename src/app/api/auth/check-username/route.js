@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { getDb } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 export async function GET(request) {
@@ -10,18 +10,12 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Username is required' }, { status: 400 });
     }
 
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('username', username)
-      .maybeSingle();
+    const sql = getDb();
+    const rows = await sql`
+      SELECT username FROM users WHERE username = ${username}
+    `;
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    const isAvailable = !data;
+    const isAvailable = rows.length === 0;
 
     return NextResponse.json({ available: isAvailable });
   } catch (err) {

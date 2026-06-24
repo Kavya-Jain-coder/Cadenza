@@ -9,25 +9,9 @@ const ARCHETYPE_FALLBACK_URLS = {
   'deep-narrator-bass': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3'
 };
 
-export async function mockApplyVoice({ supabase, voiceArchetype }) {
-  // 1. Attempt to resolve from Supabase Storage first (if files are uploaded)
-  // Folder format: voices/{archetype}.mp3
-  const voicePath = `voices/${voiceArchetype}.mp3`;
-  
-  const { data: publicUrlData } = supabase.storage
-    .from('voice-samples')
-    .getPublicUrl(voicePath);
-
-  let audioUrl = publicUrlData?.publicUrl;
-
-  try {
-    const checkFile = await fetch(audioUrl, { method: 'HEAD' });
-    if (!checkFile.ok) {
-      audioUrl = ARCHETYPE_FALLBACK_URLS[voiceArchetype] || ARCHETYPE_FALLBACK_URLS['warm-male-alto'];
-    }
-  } catch (e) {
-    audioUrl = ARCHETYPE_FALLBACK_URLS[voiceArchetype] || ARCHETYPE_FALLBACK_URLS['warm-male-alto'];
-  }
+export async function mockApplyVoice({ voiceArchetype }) {
+  // Use SoundHelix fallback URLs directly (no storage lookup needed)
+  const audioUrl = ARCHETYPE_FALLBACK_URLS[voiceArchetype] || ARCHETYPE_FALLBACK_URLS['warm-male-alto'];
 
   const metadata = {
     synthesized_at: new Date().toISOString(),

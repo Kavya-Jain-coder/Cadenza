@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { useSignup } from '@/contexts/SignupContext';
-import { createClient } from '@/lib/supabase/client';
 import { GENRES } from '@/lib/constants';
 import BackgroundImage from '@/components/ui/BackgroundImage';
 import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
@@ -15,7 +15,6 @@ import PageTransition from '@/components/layout/PageTransition';
 
 export default function GenrePrefStep() {
   const router = useRouter();
-  const supabase = createClient();
   const { signupData, clearSignupData } = useSignup();
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,40 +39,51 @@ export default function GenrePrefStep() {
 
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email: signupData.email,
-        password: signupData.password,
-        options: {
-          data: {
-            username: signupData.username,
-            genre_preferences: selectedGenres
-          }
-        }
+      // 1. Create user account via API
+      const signupRes = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: signupData.username,
+          email: signupData.email,
+          password: signupData.password,
+          genrePreferences: selectedGenres
+        })
       });
 
-      if (error) {
+      const signupResult = await signupRes.json();
+
+      if (!signupRes.ok) {
         setToastType('error');
-        setToastMessage(error.message);
+        setToastMessage(signupResult.error || 'Failed to create account');
         setIsSubmitting(false);
         return;
       }
 
-      setToastType('success');
-      // Supabase auto-login works depending on email verification settings
-      if (data?.session) {
-        setToastMessage('Account created successfully! Redirecting...');
-        clearSignupData();
-        setTimeout(() => {
-          router.push('/dashboard');
-          router.refresh();
-        }, 1500);
-      } else {
-        setToastMessage('Account created! Please check your email for a verification link.');
+      // 2. Auto-login via NextAuth credentials
+      const loginResult = await signIn('credentials', {
+        email: signupData.email,
+        password: signupData.password,
+        redirect: false
+      });
+
+      if (loginResult?.error) {
+        setToastType('error');
+        setToastMessage('Account created but auto-login failed. Please log in manually.');
         clearSignupData();
         setTimeout(() => {
           router.push('/auth/login/email');
-        }, 3000);
+        }, 2000);
+        return;
       }
+
+      setToastType('success');
+      setToastMessage('Account created successfully! Redirecting...');
+      clearSignupData();
+      setTimeout(() => {
+        router.push('/dashboard');
+        router.refresh();
+      }, 1500);
     } catch (err) {
       setToastType('error');
       setToastMessage('An unexpected error occurred. Please try again.');

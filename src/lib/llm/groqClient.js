@@ -9,8 +9,8 @@ export async function groqGenerate({ systemPrompt, userPrompt, stream = false })
     throw new Error('GROQ_API_KEY environment variable is not defined.');
   }
 
-  // Use llama3-70b-8192 or standard models
-  const model = 'llama3-70b-8192';
+  // Use llama-3.3-70b-versatile or standard models
+  const model = 'llama-3.3-70b-versatile';
 
   if (stream) {
     return await groq.chat.completions.create({

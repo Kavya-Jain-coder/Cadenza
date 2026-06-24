@@ -13,9 +13,19 @@ export default function WaveformVisualizer({ audioUrl, onReady, isMuted = false 
   useEffect(() => {
     if (!containerRef.current || !audioUrl) return;
 
+    let loadUrl = audioUrl;
+    if (!audioUrl.startsWith('blob:') && !audioUrl.startsWith('data:') && audioUrl.startsWith('http')) {
+      loadUrl = `/api/proxy-audio?url=${encodeURIComponent(audioUrl)}`;
+    }
+
+    const audio = new Audio();
+    audio.src = loadUrl;
+    audio.crossOrigin = 'anonymous';
+
     // Create WaveSurfer instance
     const ws = WaveSurfer.create({
       container: containerRef.current,
+      media: audio,
       waveColor: 'rgba(188, 124, 10, 0.25)',
       progressColor: '#d69c17',
       cursorColor: 'transparent',
@@ -24,13 +34,10 @@ export default function WaveformVisualizer({ audioUrl, onReady, isMuted = false 
       barRadius: 2,
       height: 60,
       normalize: true,
-      backend: 'WebAudio',
       fillParent: true
     });
 
     wavesurferRef.current = ws;
-
-    ws.load(audioUrl);
 
     ws.on('ready', () => {
       setIsLoaded(true);
@@ -41,7 +48,17 @@ export default function WaveformVisualizer({ audioUrl, onReady, isMuted = false 
     ws.on('pause', () => setIsPlaying(false));
 
     return () => {
-      ws.destroy();
+      audio.pause();
+      audio.removeAttribute('src');
+      audio.load();
+      try {
+        if (wavesurferRef.current) {
+          wavesurferRef.current.destroy();
+          wavesurferRef.current = null;
+        }
+      } catch (err) {
+        console.warn('WaveSurfer cleanup error:', err);
+      }
     };
   }, [audioUrl, onReady]);
 

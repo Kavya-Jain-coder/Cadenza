@@ -1,19 +1,18 @@
-const { createClient } = require('@supabase/supabase-js');
+const { neon } = require('@neondatabase/serverless');
 const dotenv = require('dotenv');
 const path = require('path');
 
 // Load environment variables from .env.local
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const databaseUrl = process.env.DATABASE_URL;
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Error: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be defined in .env.local');
+if (!databaseUrl) {
+  console.error('Error: DATABASE_URL must be defined in .env.local');
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const sql = neon(databaseUrl);
 
 const CORPUS_SEEDS = [
   // ==========================================
@@ -173,30 +172,29 @@ async function seed() {
   console.log('Seeding lyric grounding corpus...');
 
   // Delete existing seeds
-  const { error: deleteError } = await supabase
-    .from('lyric_corpus')
-    .delete()
-    .neq('id', 0); // Delete all rows
-
-  if (deleteError) {
-    console.error('Error clearing corpus table:', deleteError.message);
+  try {
+    await sql`DELETE FROM lyric_corpus WHERE id > 0`;
+    console.log('Cleared existing corpus entries.');
+  } catch (err) {
+    console.error('Error clearing corpus table:', err.message);
     process.exit(1);
   }
 
-  // Insert seeds
-  const { data, error } = await supabase
-    .from('lyric_corpus')
-    .insert(CORPUS_SEEDS.map(item => ({
-      ...item,
-      embedding: null // Since we're using keyword/column fallback, we don't need vectors generated
-    })));
-
-  if (error) {
-    console.error('Error seeding corpus:', error.message);
-    process.exit(1);
+  // Insert seeds one by one (NeonDB serverless driver works best with individual inserts)
+  let insertCount = 0;
+  for (const item of CORPUS_SEEDS) {
+    try {
+      await sql`
+        INSERT INTO lyric_corpus (genre, category, content)
+        VALUES (${item.genre}, ${item.category}, ${item.content})
+      `;
+      insertCount++;
+    } catch (err) {
+      console.error(`Error inserting seed [${item.genre}/${item.category}]:`, err.message);
+    }
   }
 
-  console.log('Successfully seeded lyric grounding corpus!');
+  console.log(`Successfully seeded ${insertCount}/${CORPUS_SEEDS.length} lyric grounding entries!`);
 }
 
 seed();
