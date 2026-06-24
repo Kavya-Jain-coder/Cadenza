@@ -53,8 +53,7 @@ export default function LoginPassword() {
       sessionStorage.removeItem('cadenza_login_email');
 
       setTimeout(() => {
-        router.push('/dashboard');
-        router.refresh();
+        window.location.href = '/dashboard';
       }, 1200);
     } catch (err) {
       setToastType('error');

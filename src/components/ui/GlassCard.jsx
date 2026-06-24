@@ -23,11 +23,11 @@ export default function GlassCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 30, scale: 0.95, filter: 'blur(10px)' }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: "-50px" }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.5 }}
+      exit={{ opacity: 0, y: -20, scale: 0.95, filter: 'blur(10px)' }}
+      transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.8, delay: 0.1 }}
       className={cardClasses}
       {...props}
     >

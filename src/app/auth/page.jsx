@@ -5,6 +5,7 @@ import BackgroundImage from '@/components/ui/BackgroundImage';
 import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import PageTransition from '@/components/layout/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function WelcomeGate() {
   return (
@@ -14,7 +15,12 @@ export default function WelcomeGate() {
 
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
-        <div className="max-w-xl md:mb-12">
+        <motion.div 
+          className="max-w-xl md:mb-12"
+          initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+          transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.2 }}
+        >
           <span className="text-[10px] tracking-[0.3em] font-mono text-gold-400 uppercase mb-3 block drop-shadow-md">
             Welcome to Cadenza
           </span>
@@ -27,7 +33,7 @@ export default function WelcomeGate() {
           <p className="text-zinc-300 text-sm md:text-base font-sans max-w-sm leading-relaxed drop-shadow-md">
             Unlock your sonic signature. Generate lyrics, design instrumentals, and synthesize vocals in our premium creative studio.
           </p>
-        </div>
+        </motion.div>
 
         {/* Bottom/Right Input Region */}
         <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
