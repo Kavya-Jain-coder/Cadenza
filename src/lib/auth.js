@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs';
 import { getDb } from '@/lib/db';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -12,7 +14,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        console.log('[NextAuth] Authorize called with email:', credentials?.email);
         if (!credentials?.email || !credentials?.password) {
+          console.log('[NextAuth] Missing credentials');
           return null;
         }
 
@@ -25,6 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           `;
 
           if (rows.length === 0) {
+            console.log('[NextAuth] User not found');
             return null;
           }
 
@@ -32,16 +37,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const isValid = await bcrypt.compare(credentials.password, user.password_hash);
 
           if (!isValid) {
+            console.log('[NextAuth] Invalid password');
             return null;
           }
 
+          console.log('[NextAuth] Login successful for:', user.id);
           return {
             id: user.id,
             email: user.email,
             name: user.username
           };
         } catch (error) {
-          console.error('Auth error:', error);
+          console.error('[NextAuth] Auth error:', error);
           return null;
         }
       }
@@ -52,6 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
+      console.log('[NextAuth] JWT callback. User:', user, 'Token:', token);
       if (user) {
         token.id = user.id;
         token.username = user.name;
@@ -59,7 +67,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token }) {
+      console.log('[NextAuth] Session callback. Token:', token);
       if (token) {
+        if (!session.user) {
+          session.user = {};
+        }
         session.user.id = token.id;
         session.user.username = token.username;
       }
