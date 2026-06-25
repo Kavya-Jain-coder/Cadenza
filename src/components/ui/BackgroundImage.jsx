@@ -44,8 +44,9 @@ export default function BackgroundImage({ route }) {
         )}
       </AnimatePresence>
       
-      {/* Subtle edge darkening, no heavy middle vignettes */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(5,5,8,0.7)_100%)] mix-blend-multiply" />
+      {/* Stronger global dark overlay for text legibility */}
+      <div className="absolute inset-0 pointer-events-none bg-black/40" />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,8,0.85)_100%)] mix-blend-multiply" />
     </div>
   );
 }

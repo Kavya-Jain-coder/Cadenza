@@ -143,7 +143,7 @@ export default function VoiceCalibration() {
   };
 
   return (
-    <div className="bg-void/40 border border-white/5 rounded-xl p-6 shadow-xl relative overflow-hidden">
+    <div className="bg-void/80 border border-white/5 rounded-xl p-6 shadow-xl relative overflow-hidden backdrop-blur-md">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-theme-400">
