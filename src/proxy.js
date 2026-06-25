@@ -3,7 +3,23 @@ import { getToken } from 'next-auth/jwt';
 
 // This function can be marked `async` if using `await` inside
 export async function proxy(request) {
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+  // NextAuth v5 uses AUTH_SECRET (falling back to NEXTAUTH_SECRET)
+  // and cookie name "__Secure-authjs.session-token" on HTTPS
+  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+
+  // Determine the correct cookie name based on protocol
+  const isSecure = request.url.startsWith('https');
+  const cookieName = isSecure
+    ? '__Secure-authjs.session-token'
+    : 'authjs.session-token';
+
+  const token = await getToken({
+    req: request,
+    secret,
+    cookieName,
+    salt: cookieName,
+  });
+
   const url = new URL(request.url);
   const path = url.pathname;
 
