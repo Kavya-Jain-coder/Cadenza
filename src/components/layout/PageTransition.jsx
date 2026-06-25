@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 const variants = {
   'slide-right': {
@@ -31,10 +32,12 @@ const variants = {
 };
 
 export default function PageTransition({ children, variant = 'slide-left', className = "" }) {
+  const pathname = usePathname();
   const currentVariant = variants[variant] || variants['slide-left'];
 
   return (
     <motion.div
+      key={pathname}
       initial="initial"
       animate="animate"
       exit="exit"

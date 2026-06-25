@@ -36,28 +36,28 @@
 }
 
 :root {
-  --background: #050508;
+  --background: #000000;
   --foreground: #ffffff;
   
-  /* Default Theme (Orange) - overwritten by ThemeManager */
-  --dyn-theme-50: 255 247 237;
-  --dyn-theme-100: 255 237 213;
-  --dyn-theme-200: 254 215 170;
-  --dyn-theme-300: 253 186 116;
-  --dyn-theme-400: 251 146 60;
-  --dyn-theme-500: 249 115 22;
-  --dyn-theme-600: 234 88 12;
-  --dyn-theme-700: 194 65 12;
-  --dyn-theme-800: 154 52 18;
-  --dyn-theme-900: 124 45 18;
-  --dyn-theme-950: 67 20 7;
+  /* Ultra-Premium Monochrome / Silver Theme */
+  --dyn-theme-50: 255 255 255;   /* #FFFFFF */
+  --dyn-theme-100: 244 244 245;  /* #F4F4F5 zinc-100 */
+  --dyn-theme-200: 228 228 231;  /* #E4E4E7 zinc-200 */
+  --dyn-theme-300: 212 212 216;  /* #D4D4D8 zinc-300 */
+  --dyn-theme-400: 161 161 170;  /* #A1A1AA zinc-400 */
+  --dyn-theme-500: 113 113 122;  /* #71717A zinc-500 */
+  --dyn-theme-600: 82 82 91;     /* #52525B zinc-600 */
+  --dyn-theme-700: 63 63 70;     /* #3F3F46 zinc-700 */
+  --dyn-theme-800: 39 39 42;     /* #27272A zinc-800 */
+  --dyn-theme-900: 24 24 27;     /* #18181B zinc-900 */
+  --dyn-theme-950: 9 9 11;       /* #09090B zinc-950 */
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
-  transition: --dyn-theme-50 0.5s ease, --dyn-theme-500 0.5s ease;
+  /* transition: --dyn-theme-50 0.5s ease, --dyn-theme-500 0.5s ease; */
 }
 
 /* Custom Scrollbar */

@@ -1,12 +1,17 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function AmbientVisualizer() {
+  const pathname = usePathname();
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    if (pathname === '/') return;
+
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animationFrameId;
     let particles = [];
@@ -20,10 +25,11 @@ export default function AmbientVisualizer() {
     resize();
 
     class Particle {
-      constructor() {
+      constructor(themeColor) {
         this.x = Math.random() * canvas.width;
         this.y = canvas.height + Math.random() * 200;
         this.size = Math.random() * 2 + 0.5;
+        this.themeColor = themeColor;
         this.speedY = Math.random() * 0.5 + 0.1;
         this.speedX = (Math.random() - 0.5) * 0.3;
         this.opacity = Math.random() * 0.3 + 0.1;
@@ -43,21 +49,20 @@ export default function AmbientVisualizer() {
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        
-        // Get the dynamic theme color from the root element
-        const rootStyle = getComputedStyle(document.documentElement);
-        const themeColor = rootStyle.getPropertyValue('--dyn-theme-500').trim() || '249 115 22';
-        
-        ctx.fillStyle = `rgba(${themeColor.split(' ').join(', ')}, ${this.opacity})`;
+        ctx.fillStyle = `rgba(${this.themeColor}, ${this.opacity})`;
         ctx.fill();
       }
     }
 
     const init = () => {
       particles = [];
+      const rootStyle = getComputedStyle(document.documentElement);
+      const themeStr = rootStyle.getPropertyValue('--dyn-theme-500').trim() || '249 115 22';
+      const themeColor = themeStr.split(' ').join(', ');
+      
       const numParticles = Math.floor(window.innerWidth / 20); // Scale with screen
       for (let i = 0; i < numParticles; i++) {
-        particles.push(new Particle());
+        particles.push(new Particle(themeColor));
       }
     };
 
@@ -77,7 +82,9 @@ export default function AmbientVisualizer() {
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [pathname]);
+
+  if (pathname === '/') return null;
 
   return (
     <canvas

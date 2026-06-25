@@ -4,8 +4,6 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { INSTRUMENTS } from '@/lib/constants';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
 import MockBadge from '@/components/ui/MockBadge';
@@ -181,9 +179,7 @@ function InstrumentalStudioContent() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative py-24">
-      <BackgroundImage route="/studio/instrumental" />
-      <GoldWaveSVG speedMultiplier={0.5} density={3} />
-
+            
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
         
         {/* Editor Settings Panel */}

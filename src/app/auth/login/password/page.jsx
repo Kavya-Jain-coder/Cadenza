@@ -3,14 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import StepIndicator from '@/components/ui/StepIndicator';
 import AnimatedInput from '@/components/ui/AnimatedInput';
 import Button from '@/components/ui/Button';
 import Toast from '@/components/ui/Toast';
-import PageTransition from '@/components/layout/PageTransition';
 import { motion } from 'framer-motion';
 
 export default function LoginPassword() {
@@ -69,10 +66,8 @@ export default function LoginPassword() {
   };
 
   return (
-    <PageTransition variant="dissolve" className="flex flex-col h-full w-full relative">
-      <BackgroundImage route="/auth/login/password" />
-      <GoldWaveSVG speedMultiplier={0.8} density={2} />
-
+    <div className="flex flex-col h-full w-full relative">
+            
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <motion.div 
@@ -105,7 +100,6 @@ export default function LoginPassword() {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
             required
           />
 
@@ -148,6 +142,6 @@ export default function LoginPassword() {
           onClose={() => setToastMessage('')}
         />
       )}
-    </PageTransition>
+    </div>
   );
 }

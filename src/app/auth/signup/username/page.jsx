@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSignup } from '@/contexts/SignupContext';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import StepIndicator from '@/components/ui/StepIndicator';
 import AnimatedInput from '@/components/ui/AnimatedInput';
@@ -70,9 +68,7 @@ export default function UsernameStep() {
 
   return (
     <PageTransition variant="slide-right" className="flex flex-col h-full w-full relative">
-      <BackgroundImage route="/auth/signup/username" />
-      <GoldWaveSVG speedMultiplier={0.8} density={2} />
-
+            
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <div className="max-w-xl md:mb-12">
@@ -97,7 +93,6 @@ export default function UsernameStep() {
               if (error) setError('');
             }}
             onBlur={handleBlur}
-            placeholder="e.g. soundwave_99"
             required
             error={error}
           />

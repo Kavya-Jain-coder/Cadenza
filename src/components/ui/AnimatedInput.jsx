@@ -19,33 +19,34 @@ export default function AnimatedInput({
 
   return (
     <div className="w-full mb-5">
-      {label && (
-        <label
-          htmlFor={id}
-          className="block text-[10px] tracking-widest font-mono text-theme-400 uppercase mb-2"
-        >
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
-      )}
-      <div className="relative">
+      <div className="relative group">
         <input
           type={type === 'password' && showPassword ? 'text' : type}
           id={id}
           value={value}
           onChange={onChange}
-          placeholder={placeholder}
           required={required}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className={`w-full px-4 py-3 bg-void/60 text-white rounded-lg border focus:outline-none transition-all duration-300 ${
+          className={`peer w-full px-4 pt-6 pb-2 bg-white/5 text-white rounded-xl border focus:outline-none transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] ${
             error
-              ? 'border-red-500 focus:border-red-500/80 focus:ring-1 focus:ring-red-500/20'
+              ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 bg-red-500/5'
               : isFocused
-              ? 'border-theme-400 focus:border-theme-300 ring-2 ring-theme-500/10'
-              : 'border-white/10 hover:border-white/20'
+              ? 'border-theme-500/50 focus:border-theme-400 ring-2 ring-theme-500/20 bg-white/10'
+              : 'border-white/10 hover:border-white/20 hover:bg-white/[0.07]'
           } ${type === 'password' ? 'pr-12' : ''}`}
           {...props}
         />
+        <label
+          htmlFor={id}
+          className={`absolute left-4 transition-all duration-300 pointer-events-none ${
+            isFocused || value
+              ? 'top-2 text-[10px] text-theme-400 font-mono tracking-widest uppercase'
+              : 'top-1/2 -translate-y-1/2 text-sm text-zinc-400'
+          }`}
+        >
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
 
         {/* Focus Soundwave Equalizer Micro-interaction */}
         {isFocused && type !== 'password' && (

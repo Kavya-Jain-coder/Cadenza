@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LANGUAGES } from '@/lib/config/languages';
 import { GENRES } from '@/lib/constants';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
 import AnimatedInput from '@/components/ui/AnimatedInput';
@@ -153,9 +151,7 @@ export default function LyricStudio() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative py-20">
-      <BackgroundImage route="/studio/lyrics" />
-      <GoldWaveSVG speedMultiplier={0.6} density={3} />
-
+            
       <div className="w-full max-w-2xl relative z-10">
         <AnimatePresence mode="wait">
           {/* STEP 1: LANGUAGE SELECT */}

@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useSignup } from '@/contexts/SignupContext';
 import { GENRES } from '@/lib/constants';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import StepIndicator from '@/components/ui/StepIndicator';
 import Button from '@/components/ui/Button';
@@ -92,9 +90,7 @@ export default function GenrePrefStep() {
 
   return (
     <PageTransition variant="scale-pop" className="flex flex-col h-full w-full relative">
-      <BackgroundImage route="/auth/signup/genre-pref" />
-      <GoldWaveSVG speedMultiplier={0.8} density={2} />
-
+            
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <div className="max-w-xl md:mb-12">

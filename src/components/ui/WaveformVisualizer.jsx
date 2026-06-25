@@ -76,7 +76,10 @@ export default function WaveformVisualizer({ audioUrl, onReady, isMuted = false 
   };
 
   return (
-    <div className="w-full bg-void/40 border border-theme-500/10 rounded-xl p-4 flex flex-col gap-3">
+    <div className="w-full glass-premium rounded-2xl p-6 flex flex-col gap-4 border border-white/5 relative overflow-hidden group">
+      {/* Subtle hardware scanline effect */}
+      <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none opacity-20" />
+      
       {!isLoaded && (
         <div className="h-[60px] flex items-center justify-center">
           <div className="flex gap-[3px] items-end h-6">

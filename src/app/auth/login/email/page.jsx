@@ -2,13 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import StepIndicator from '@/components/ui/StepIndicator';
 import AnimatedInput from '@/components/ui/AnimatedInput';
 import Button from '@/components/ui/Button';
-import PageTransition from '@/components/layout/PageTransition';
 import { motion } from 'framer-motion';
 
 export default function LoginEmail() {
@@ -45,17 +42,15 @@ export default function LoginEmail() {
   };
 
   return (
-    <PageTransition variant="slide-left" className="flex flex-col h-full w-full relative">
-      <BackgroundImage route="/auth/login/email" />
-      <GoldWaveSVG speedMultiplier={0.8} density={2} />
-
+    <div className="flex flex-col h-full w-full relative">
+            
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <motion.div 
           className="max-w-xl md:mb-12"
-          initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-          transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.2 }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
         >
           <StepIndicator currentStep={1} totalSteps={2} label="Sign In" />
           <h2 className="font-serif text-4xl md:text-6xl text-white mb-4 tracking-wide drop-shadow-xl mt-4">
@@ -69,11 +64,11 @@ export default function LoginEmail() {
         {/* Bottom/Right Input Region */}
         <motion.div
           className="w-full max-w-sm md:mb-12"
-          initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.4 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <GlassCard className="w-full bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6" animate={false}>
+          <GlassCard className="w-full bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6">
           <form onSubmit={handleNext} className="flex flex-col gap-4">
           <AnimatedInput
             label="Email Address"
@@ -84,7 +79,6 @@ export default function LoginEmail() {
               setEmail(e.target.value);
               if (error) setError('');
             }}
-            placeholder="e.g. name@domain.com"
             required
             error={error}
           />
@@ -109,6 +103,6 @@ export default function LoginEmail() {
       </GlassCard>
       </motion.div>
       </div>
-    </PageTransition>
+    </div>
   );
 }

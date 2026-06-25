@@ -5,8 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VOICE_EFFECTS_PRESETS } from '@/lib/constants';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
 import Toast from '@/components/ui/Toast';
@@ -356,9 +354,7 @@ function VoiceStudioContent() {
 
     return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative py-24 bg-obsidian text-white">
-      <BackgroundImage route="/studio/voice" />
-      <GoldWaveSVG speedMultiplier={0.3} density={2.5} />
-
+            
       <div className="w-full max-w-4xl relative z-10">
         {/* Step Indicator */}
         <StepIndicator 

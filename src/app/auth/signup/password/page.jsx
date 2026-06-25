@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSignup } from '@/contexts/SignupContext';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import StepIndicator from '@/components/ui/StepIndicator';
 import AnimatedInput from '@/components/ui/AnimatedInput';
 import Button from '@/components/ui/Button';
 import PageTransition from '@/components/layout/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function PasswordStep() { 
   const router = useRouter();
@@ -72,13 +71,16 @@ export default function PasswordStep() {
   };
 
   return (
-    <PageTransition variant="slide-right" className="flex flex-col h-full w-full relative">
-      <BackgroundImage route="/auth/signup/password" />
-      <GoldWaveSVG speedMultiplier={0.8} density={2} />
-
+    <PageTransition variant="dissolve" className="flex flex-col h-full w-full relative">
+            
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
-        <div className="max-w-xl md:mb-12">
+        <motion.div 
+          className="max-w-xl md:mb-12"
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.4 }}
+        >
           <StepIndicator currentStep={3} totalSteps={4} label="Create Account" />
           <h2 className="font-serif text-4xl md:text-6xl text-white mb-4 tracking-wide drop-shadow-xl mt-4">
             Secure your account
@@ -86,10 +88,16 @@ export default function PasswordStep() {
           <p className="text-zinc-300 text-sm md:text-base leading-relaxed drop-shadow-md">
             Create a solid password to protect your original music creations.
           </p>
-        </div>
+        </motion.div>
 
         {/* Bottom/Right Input Region */}
-        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6">
+        <motion.div
+          className="w-full max-w-sm md:mb-12"
+          initial={{ opacity: 0, scale: 0.98, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+        <GlassCard className="w-full bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6">
           <form onSubmit={handleNext} className="flex flex-col gap-4">
           <AnimatedInput
             label="Password"
@@ -100,7 +108,6 @@ export default function PasswordStep() {
               setPassword(e.target.value);
               if (error) setError('');
             }}
-            placeholder="Min. 6 characters"
             required
           />
 
@@ -127,7 +134,6 @@ export default function PasswordStep() {
               setConfirmPassword(e.target.value);
               if (error) setError('');
             }}
-            placeholder="Re-enter password"
             required
             error={error}
           />
@@ -149,7 +155,8 @@ export default function PasswordStep() {
             </Button>
           </div>
         </form>
-      </GlassCard>
+        </GlassCard>
+        </motion.div>
       </div>
     </PageTransition>
   );

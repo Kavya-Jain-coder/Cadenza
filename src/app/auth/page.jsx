@@ -1,8 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import BackgroundImage from '@/components/ui/BackgroundImage';
-import GoldWaveSVG from '@/components/ui/GoldWaveSVG';
 import GlassCard from '@/components/ui/GlassCard';
 import PageTransition from '@/components/layout/PageTransition';
 import { motion } from 'framer-motion';
@@ -10,9 +8,7 @@ import { motion } from 'framer-motion';
 export default function WelcomeGate() {
   return (
     <PageTransition variant="scale-pop" className="flex flex-col h-full w-full relative">
-      <BackgroundImage route="/auth" />
-      <GoldWaveSVG speedMultiplier={1} density={2} />
-
+            
       <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <motion.div 

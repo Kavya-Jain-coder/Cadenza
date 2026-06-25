@@ -146,7 +146,7 @@ export default function VoiceEffectsPanel({ vocalBuffer, voiceFootprint, isAutoV
   }, []);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6 glass-premium rounded-3xl p-8 border border-white/5">
       {/* Presets */}
       <div className="flex flex-col gap-2">
         <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase">Quick Presets</span>
