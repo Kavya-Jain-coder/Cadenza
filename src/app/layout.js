@@ -4,6 +4,9 @@ import Navbar from "@/components/layout/Navbar";
 import Providers from "@/components/layout/Providers";
 import AmbientVisualizer from "@/components/ui/AmbientVisualizer";
 import ThemeManager from "@/components/layout/ThemeManager";
+import SmoothScroll from "@/components/layout/SmoothScroll";
+import CustomCursor from "@/components/ui/CustomCursor";
+import NoiseOverlay from "@/components/ui/NoiseOverlay";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -38,12 +41,16 @@ export default async function RootLayout({ children }) {
       lang="en"
       className={`${outfit.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
+      <body className="min-h-full flex flex-col bg-obsidian text-white font-sans md:cursor-none">
         <Providers session={session}>
-          <ThemeManager />
-          <AmbientVisualizer />
-          <Navbar />
-          {children}
+          <SmoothScroll>
+            <ThemeManager />
+            <AmbientVisualizer />
+            <CustomCursor />
+            <NoiseOverlay />
+            <Navbar />
+            {children}
+          </SmoothScroll>
         </Providers>
       </body>
     </html>
