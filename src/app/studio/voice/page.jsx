@@ -593,19 +593,16 @@ function VoiceStudioContent() {
                     </Button>
                     <Button
                       variant="secondary"
-                      onClick={async () => {
+                      onClick={() => {
                         setIsDownloading(true);
                         try {
-                          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                          const buffer = await fetchAndDecode(mixedAudio.blobUrl, audioCtx);
-                          const mp3Blob = audioBufferToMp3(buffer);
-                          saveAs(mp3Blob, `Cadenza_MasterMix.mp3`);
+                          saveAs(mixedAudio.blobUrl, `Cadenza_MasterMix.mp3`);
                           setToastType('success');
                           setToastMessage('MP3 Downloaded Successfully!');
                         } catch (e) {
                           console.error(e);
                           setToastType('error');
-                          setToastMessage('Failed to encode MP3.');
+                          setToastMessage('Failed to download MP3.');
                         } finally {
                           setIsDownloading(false);
                         }

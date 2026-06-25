@@ -2,6 +2,7 @@
  * Procedural Web Audio Beat Synthesizer
  * Generates high-fidelity 30-second backing tracks client-side using OfflineAudioContext.
  */
+import { audioBufferToMp3 } from './audioUtils';
 
 const GENRE_TEMPO = {
   pop: 116,
@@ -621,9 +622,8 @@ export async function generateProceduralBeat(genre = 'pop', selectedInstruments 
   // Render context to buffer
   const renderedBuffer = await ctx.startRendering();
 
-  // Encode AudioBuffer to WAV
-  const wavBytes = audioBufferToWav(renderedBuffer);
-  const blob = new Blob([wavBytes], { type: 'audio/wav' });
+  // Encode AudioBuffer to MP3 to avoid Vercel 4.5MB payload limit
+  const blob = audioBufferToMp3(renderedBuffer);
 
   // Convert Blob to base64 data URL
   const base64DataUrl = await new Promise((resolve) => {

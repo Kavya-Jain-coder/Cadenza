@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { mixAudioBuffers, audioBufferToWav, blobToBase64 } from '@/lib/audio/audioUtils';
+import { mixAudioBuffers, audioBufferToWav, audioBufferToMp3, blobToBase64 } from '@/lib/audio/audioUtils';
 
 // Volume slider component
 const VolumeSlider = ({ label, icon, value, onChange, color }) => (
@@ -79,18 +79,18 @@ export default function AudioMixer({
         (p) => setMixProgress(Math.max(p * 0.6, mixProgress)) // 0-60%
       );
 
-      // Step 2: Encode as WAV
+      // Step 2: Encode as MP3 to avoid Vercel 4.5MB payload limit
       setMixProgress(70);
-      const wavBlob = audioBufferToWav(mixedBuffer);
+      const mp3Blob = audioBufferToMp3(mixedBuffer);
 
       // Step 3: Create playback URL
       setMixProgress(85);
-      const url = URL.createObjectURL(wavBlob);
+      const url = URL.createObjectURL(mp3Blob);
       setMixedUrl(url);
 
       // Step 4: Convert to base64 for storage
       setMixProgress(90);
-      const base64DataUrl = await blobToBase64(wavBlob);
+      const base64DataUrl = await blobToBase64(mp3Blob);
 
       setMixProgress(100);
 
