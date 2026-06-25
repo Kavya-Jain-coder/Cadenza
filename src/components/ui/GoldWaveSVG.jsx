@@ -34,7 +34,7 @@ export default function GoldWaveSVG({ speedMultiplier = 1, density = 3 }) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="theme-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#bc7c0a" stopOpacity="0.2" />
             <stop offset="50%" stopColor="#d69c17" stopOpacity="1" />
             <stop offset="100%" stopColor="#bc7c0a" stopOpacity="0.2" />
@@ -45,7 +45,7 @@ export default function GoldWaveSVG({ speedMultiplier = 1, density = 3 }) {
             key={idx}
             d={wave.d}
             fill="none"
-            stroke="url(#gold-gradient)"
+            stroke="url(#theme-gradient)"
             strokeWidth="1"
             opacity={wave.opacity}
             animate={{

@@ -385,7 +385,7 @@ function VoiceStudioContent() {
                   className="flex flex-col gap-5 flex-grow"
                 >
                   <div>
-                    <span className="text-[9px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-1 block">
+                    <span className="text-[9px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-1 block">
                       Step 1 of 3
                     </span>
                     <h2 className="font-serif text-2xl text-white mb-2">
@@ -399,7 +399,7 @@ function VoiceStudioContent() {
                   {/* Instrumental Selector */}
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                      <label className="text-[9px] tracking-widest font-mono text-gold-400 uppercase">
+                      <label className="text-[9px] tracking-widest font-mono text-theme-400 uppercase">
                         Select backing session
                       </label>
                       {selectedInstId && (
@@ -411,7 +411,7 @@ function VoiceStudioContent() {
                             const lyricId = inst?.lyric_id || '';
                             router.push(`/studio/instrumental?lyricId=${lyricId}&instruments=${instNames}`);
                           }}
-                          className="text-[9px] font-mono text-gold-400 hover:text-white transition-colors underline uppercase tracking-wider cursor-pointer"
+                          className="text-[9px] font-mono text-theme-400 hover:text-white transition-colors underline uppercase tracking-wider cursor-pointer"
                         >
                           Modify Beat 🎵
                         </button>
@@ -421,7 +421,7 @@ function VoiceStudioContent() {
                       value={selectedInstId}
                       onChange={(e) => handleInstrumentalChange(e.target.value)}
                       disabled={instrumentalList.length === 0}
-                      className="w-full px-4 py-2.5 bg-void/60 text-white rounded-lg border border-white/10 focus:border-gold-400 focus:outline-none text-xs font-mono"
+                      className="w-full px-4 py-2.5 bg-void/60 text-white rounded-lg border border-white/10 focus:border-theme-400 focus:outline-none text-xs font-mono"
                     >
                       {instrumentalList.map((inst) => (
                         <option key={inst.id} value={inst.id}>
@@ -449,7 +449,7 @@ function VoiceStudioContent() {
                       <div className="p-4 rounded-xl border border-white/5 bg-void/20">
                         {isDecodingInstrumental ? (
                           <div className="flex flex-col items-center justify-center py-10 gap-2">
-                            <div className="w-6 h-6 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+                            <div className="w-6 h-6 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
                             <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
                               Loading backing track...
                             </span>
@@ -473,11 +473,11 @@ function VoiceStudioContent() {
                                   variant="secondary"
                                   onClick={handleAutoSing}
                                   disabled={isAutoSinging || !lyricsData}
-                                  className="w-full text-xs py-3 border border-gold-500/30 text-gold-400 flex justify-center items-center gap-2 bg-gold-950/20 hover:bg-gold-950/40"
+                                  className="w-full text-xs py-3 border border-theme-500/30 text-theme-400 flex justify-center items-center gap-2 bg-theme-950/20 hover:bg-theme-950/40"
                                 >
                                   {isAutoSinging ? (
                                     <>
-                                      <div className="w-3 h-3 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+                                      <div className="w-3 h-3 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
                                       Generating Vocoder Track...
                                     </>
                                   ) : (
@@ -512,7 +512,7 @@ function VoiceStudioContent() {
                   className="flex flex-col gap-5 flex-grow"
                 >
                   <div>
-                    <span className="text-[9px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-1 block">
+                    <span className="text-[9px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-1 block">
                       Step 2 of 3
                     </span>
                     <h2 className="font-serif text-2xl text-white mb-2">
@@ -560,7 +560,7 @@ function VoiceStudioContent() {
                   className="flex flex-col gap-5 flex-grow"
                 >
                   <div>
-                    <span className="text-[9px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-1 block">
+                    <span className="text-[9px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-1 block">
                       Step 3 of 3
                     </span>
                     <h2 className="font-serif text-2xl text-white mb-2">
@@ -631,10 +631,10 @@ function VoiceStudioContent() {
           {/* Context Monitor (Right Card: Teleprompter / Visualizer Monitor) */}
           <GlassCard className="flex flex-col gap-4">
             <div className="flex justify-between items-center pb-2 border-b border-white/5">
-              <span className="text-[9px] tracking-widest font-mono text-gold-400 uppercase">
+              <span className="text-[9px] tracking-widest font-mono text-theme-400 uppercase">
                 {step === 3 && mixedAudio ? "Master Output Preview" : "Vocal Teleprompter"}
               </span>
-              <span className="px-2 py-0.5 rounded bg-gold-950/20 border border-gold-500/10 text-[8px] font-mono text-gold-300 uppercase">
+              <span className="px-2 py-0.5 rounded bg-theme-950/20 border border-theme-500/10 text-[8px] font-mono text-theme-300 uppercase">
                 {step === 1 ? "REC STATE" : step === 2 ? "VIRTUAL STUDIO" : "FINAL MASTER"}
               </span>
             </div>
@@ -676,11 +676,11 @@ function VoiceStudioContent() {
                             key={index}
                             className={`p-3 rounded-lg border transition-all duration-300 ${
                               isHighlighted
-                                ? 'border-gold-400 bg-gold-500/10 text-white shadow-[0_0_10px_rgba(214,156,23,0.1)] scale-[1.01]'
+                                ? 'border-theme-400 bg-theme-500/10 text-white shadow-[0_0_10px_rgba(214,156,23,0.1)] scale-[1.01]'
                                 : 'border-white/5 bg-void/25 opacity-30 scale-95'
                             }`}
                           >
-                            <span className="text-[8px] font-mono text-gold-400 block mb-1 uppercase tracking-wider">
+                            <span className="text-[8px] font-mono text-theme-400 block mb-1 uppercase tracking-wider">
                               {section.label}
                             </span>
                             <p className="text-xs italic leading-relaxed text-zinc-300">
@@ -720,7 +720,7 @@ export default function VoiceStudio() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-obsidian">
-        <div className="w-8 h-8 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
       </div>
     }>
       <VoiceStudioContent />

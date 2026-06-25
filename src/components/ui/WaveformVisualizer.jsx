@@ -76,14 +76,14 @@ export default function WaveformVisualizer({ audioUrl, onReady, isMuted = false 
   };
 
   return (
-    <div className="w-full bg-void/40 border border-gold-500/10 rounded-xl p-4 flex flex-col gap-3">
+    <div className="w-full bg-void/40 border border-theme-500/10 rounded-xl p-4 flex flex-col gap-3">
       {!isLoaded && (
         <div className="h-[60px] flex items-center justify-center">
           <div className="flex gap-[3px] items-end h-6">
             {[...Array(6)].map((_, i) => (
               <motion.div
                 key={i}
-                className="w-[2px] bg-gold-400/60 rounded-full"
+                className="w-[2px] bg-theme-400/60 rounded-full"
                 animate={{
                   height: [6, 20, 6]
                 }}
@@ -109,7 +109,7 @@ export default function WaveformVisualizer({ audioUrl, onReady, isMuted = false 
         <div className="flex justify-between items-center mt-1">
           <button
             onClick={togglePlay}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gold-500/10 border border-gold-500/20 text-gold-400 hover:bg-gold-500/20 hover:text-white transition-all text-[10px] font-mono tracking-widest uppercase"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-theme-500/10 border border-theme-500/20 text-theme-400 hover:bg-theme-500/20 hover:text-white transition-all text-[10px] font-mono tracking-widest uppercase"
           >
             {isPlaying ? (
               <>

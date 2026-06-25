@@ -14,7 +14,7 @@ export default function Toast({ message, type = 'success', onClose, duration = 3
   }, [duration, onClose]);
 
   const bgColors = {
-    success: 'border-gold-500/30 bg-void/90 text-gold-300 shadow-[0_4px_24px_rgba(188,124,10,0.15)]',
+    success: 'border-theme-500/30 bg-void/90 text-theme-300 shadow-[0_4px_24px_rgba(188,124,10,0.15)]',
     error: 'border-red-500/30 bg-red-950/20 text-red-400 shadow-[0_4px_24px_rgba(239,68,68,0.15)]',
     info: 'border-blue-500/30 bg-blue-950/20 text-blue-400 shadow-[0_4px_24px_rgba(59,130,246,0.15)]'
   };
@@ -31,7 +31,7 @@ export default function Toast({ message, type = 'success', onClose, duration = 3
             className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg border backdrop-blur-md text-xs font-mono tracking-wider ${bgColors[type]}`}
           >
             {type === 'success' && (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gold-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-theme-400">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
               </svg>
             )}

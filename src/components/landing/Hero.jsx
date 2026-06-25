@@ -16,7 +16,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.5, delay: 0.1 }}
-          className="text-[10px] sm:text-xs tracking-[0.35em] font-mono text-gold-400 uppercase mb-4 block"
+          className="text-[10px] sm:text-xs tracking-[0.35em] font-mono text-theme-400 uppercase mb-4 block"
         >
           The Future of Sound Creation
         </motion.span>
@@ -28,7 +28,7 @@ export default function Hero() {
           className="font-serif text-4xl sm:text-6xl md:text-7xl text-white mb-6 tracking-wide leading-tight"
         >
           Create Music <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-200 to-gold-400 font-normal italic">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-theme-300 via-theme-200 to-theme-400 font-normal italic">
             With AI.
           </span>
         </motion.h1>
@@ -50,13 +50,13 @@ export default function Hero() {
         >
           <Link
             href="/auth"
-            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-white font-bold border border-gold-400/20 hover:from-gold-500 hover:to-gold-400 hover:shadow-[0_4px_30px_rgba(188,124,10,0.45)] transition-all active:scale-[0.98]"
+            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase bg-gradient-to-r from-theme-600 via-theme-500 to-theme-600 text-white font-bold border border-theme-400/20 hover:from-theme-500 hover:to-theme-400 hover:shadow-[0_4px_30px_rgba(188,124,10,0.45)] transition-all active:scale-[0.98]"
           >
             Launch Studio Free
           </Link>
           <a
             href="#features"
-            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase border border-gold-500/20 bg-void/30 text-gold-400 hover:bg-gold-500/10 hover:border-gold-400 hover:text-white transition-all active:scale-[0.98]"
+            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase border border-theme-500/20 bg-void/30 text-theme-400 hover:bg-theme-500/10 hover:border-theme-400 hover:text-white transition-all active:scale-[0.98]"
           >
             Explore Features
           </a>

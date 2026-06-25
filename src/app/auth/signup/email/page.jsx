@@ -58,7 +58,7 @@ export default function EmailStep() {
         </div>
 
         {/* Bottom/Right Input Region */}
-        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6">
           <form onSubmit={handleNext} className="flex flex-col gap-4">
           <AnimatedInput
             label="Email Address"

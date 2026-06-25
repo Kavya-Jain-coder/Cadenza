@@ -17,13 +17,13 @@ export default function CreationCard({ creation, type, onDelete }) {
   };
 
   const badgeColors = {
-    lyric: 'border-gold-500/20 bg-gold-950/20 text-gold-300',
+    lyric: 'border-theme-500/20 bg-theme-950/20 text-theme-300',
     instrumental: 'border-emerald-500/20 bg-emerald-950/20 text-emerald-300',
     track: 'border-blue-500/20 bg-blue-950/20 text-blue-300'
   };
 
   return (
-    <div className="glass-premium rounded-xl p-5 border border-gold-500/10 flex flex-col justify-between hover:border-gold-500/30 transition-all select-none">
+    <div className="glass-premium rounded-xl p-5 border border-theme-500/10 flex flex-col justify-between hover:border-theme-500/30 transition-all select-none">
       <div>
         {/* Card Header */}
         <div className="flex justify-between items-center mb-3">
@@ -113,7 +113,7 @@ export default function CreationCard({ creation, type, onDelete }) {
         )}
 
         {type === 'track' && (
-          <span className="text-[8px] font-mono text-gold-400 uppercase tracking-widest">
+          <span className="text-[8px] font-mono text-theme-400 uppercase tracking-widest">
             Production Complete
           </span>
         )}

@@ -33,12 +33,12 @@ export default function Navbar() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 pointer-events-none flex justify-center">
-      <nav className="pointer-events-auto w-full max-w-5xl rounded-full border border-gold-500/20 bg-obsidian/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+      <nav className="pointer-events-auto w-full max-w-5xl rounded-full border border-theme-500/20 bg-obsidian/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
         <div className="px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <Link href="/" className="font-serif text-xl tracking-wider text-white hover:text-gold-300 transition-colors flex items-center gap-3">
+              <Link href="/" className="font-serif text-xl tracking-wider text-white hover:text-theme-300 transition-colors flex items-center gap-3">
                 <Logo className="w-8 h-8" />
                 <span>Cadenza</span>
               </Link>
@@ -53,14 +53,14 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`text-[10px] tracking-widest font-mono uppercase transition-colors relative py-1 ${
-                    isActive ? 'text-gold-400' : 'text-zinc-400 hover:text-white'
+                    isActive ? 'text-theme-400' : 'text-zinc-400 hover:text-white'
                   }`}
                 >
                   {link.label}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gold-400"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-theme-400"
                       transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.3 }}
                     />
                   )}
@@ -86,7 +86,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className="px-4 py-2 rounded bg-gradient-to-r from-gold-600 to-gold-500 text-white text-[9px] font-mono tracking-widest uppercase hover:from-gold-500 hover:to-gold-400 transition-all font-bold"
+                className="px-4 py-2 rounded bg-gradient-to-r from-theme-600 to-theme-500 text-white text-[9px] font-mono tracking-widest uppercase hover:from-theme-500 hover:to-theme-400 transition-all font-bold"
               >
                 Sign In
               </Link>
@@ -122,7 +122,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.3 }}
-            className="md:hidden border-t border-gold-500/10 bg-void/95 backdrop-blur-lg overflow-hidden"
+            className="md:hidden border-t border-theme-500/10 bg-void/95 backdrop-blur-lg overflow-hidden"
           >
             <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
               {navLinks.map((link) => {
@@ -133,7 +133,7 @@ export default function Navbar() {
                     href={link.href}
                     onClick={() => setIsOpen(false)}
                     className={`block px-3 py-2 rounded-md text-xs font-mono tracking-widest uppercase transition-colors ${
-                      isActive ? 'bg-gold-500/10 text-gold-400' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                      isActive ? 'bg-theme-500/10 text-theme-400' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     {link.label}
@@ -160,7 +160,7 @@ export default function Navbar() {
                   <Link
                     href="/auth"
                     onClick={() => setIsOpen(false)}
-                    className="block w-full text-center py-2 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-white text-[10px] font-mono tracking-widest uppercase rounded font-bold"
+                    className="block w-full text-center py-2 bg-gradient-to-r from-theme-600 to-theme-500 hover:from-theme-500 hover:to-theme-400 text-white text-[10px] font-mono tracking-widest uppercase rounded font-bold"
                   >
                     Sign In
                   </Link>

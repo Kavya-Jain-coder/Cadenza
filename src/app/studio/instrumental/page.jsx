@@ -189,7 +189,7 @@ function InstrumentalStudioContent() {
         {/* Editor Settings Panel */}
         <GlassCard className="flex flex-col gap-6">
           <div>
-            <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+            <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
               INSTRUMENTAL STUDIO
             </span>
             <h2 className="font-serif text-2xl text-white mb-2">
@@ -202,13 +202,13 @@ function InstrumentalStudioContent() {
 
           {/* Select Lyrics */}
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] tracking-widest font-mono text-gold-400 uppercase">
+            <label className="text-[10px] tracking-widest font-mono text-theme-400 uppercase">
               Lyric History Target
             </label>
             <select
               value={selectedLyricId}
               onChange={(e) => handleLyricChange(e.target.value)}
-              className="w-full px-4 py-2.5 bg-void/60 text-white rounded-lg border border-white/10 focus:border-gold-400 focus:outline-none text-xs font-mono"
+              className="w-full px-4 py-2.5 bg-void/60 text-white rounded-lg border border-white/10 focus:border-theme-400 focus:outline-none text-xs font-mono"
             >
               <option value="">No lyrics targeted (standalone beat)</option>
               {lyricsList.map((lyric) => (
@@ -221,7 +221,7 @@ function InstrumentalStudioContent() {
 
           {/* Instruments Pick Grid */}
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] tracking-widest font-mono text-gold-400 uppercase">
+            <label className="text-[10px] tracking-widest font-mono text-theme-400 uppercase">
               Select Instrument Stems
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -234,7 +234,7 @@ function InstrumentalStudioContent() {
                     onClick={() => toggleInstrument(inst.id)}
                     className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-all ${
                       isSelected
-                        ? 'border-gold-400 bg-gold-500/10 text-white'
+                        ? 'border-theme-400 bg-theme-500/10 text-white'
                         : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                     }`}
                   >
@@ -261,7 +261,7 @@ function InstrumentalStudioContent() {
           {/* Stem Parameters */}
           {selectedInstruments.length > 0 && (
             <GlassCard className="flex-grow max-h-[300px] overflow-y-auto">
-              <label className="text-[10px] tracking-widest font-mono text-gold-400 uppercase mb-4 block">
+              <label className="text-[10px] tracking-widest font-mono text-theme-400 uppercase mb-4 block">
                 Stem Configurations
               </label>
               <div className="space-y-4">
@@ -287,7 +287,7 @@ function InstrumentalStudioContent() {
                                 onClick={() => handleSettingChange(id, 'quality', q)}
                                 className={`flex-1 py-1 text-[8px] font-mono rounded transition-colors uppercase ${
                                   settings.quality === q
-                                    ? 'bg-gold-500/20 text-gold-300'
+                                    ? 'bg-theme-500/20 text-theme-300'
                                     : 'text-zinc-500 hover:text-zinc-300'
                                 }`}
                               >
@@ -321,7 +321,7 @@ function InstrumentalStudioContent() {
           {/* Composer Preview Output */}
           <GlassCard className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <span className="text-[10px] tracking-widest font-mono text-gold-400 uppercase">
+              <span className="text-[10px] tracking-widest font-mono text-theme-400 uppercase">
                 COMPOSER PREVIEW
               </span>
               {process.env.NEXT_PUBLIC_INSTRUMENTAL_PROVIDER === 'browser-synth' ? (
@@ -336,7 +336,7 @@ function InstrumentalStudioContent() {
 
             {isGenerating && (
               <div className="flex flex-col items-center justify-center py-6 gap-2">
-                <div className="w-6 h-6 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
                   Synthesizing stems...
                 </span>
@@ -358,7 +358,7 @@ function InstrumentalStudioContent() {
                   {result.instruments.map((inst, index) => (
                     <span
                       key={index}
-                      className="px-2 py-0.5 rounded bg-gold-950/20 border border-gold-500/10 text-[8px] font-mono text-gold-300 uppercase"
+                      className="px-2 py-0.5 rounded bg-theme-950/20 border border-theme-500/10 text-[8px] font-mono text-theme-300 uppercase"
                     >
                       {inst.name} ({inst.quality} · {inst.effect})
                     </span>
@@ -421,7 +421,7 @@ export default function InstrumentalStudio() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-obsidian">
-        <div className="w-8 h-8 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
       </div>
     }>
       <InstrumentalStudioContent />

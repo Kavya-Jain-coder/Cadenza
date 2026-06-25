@@ -5,16 +5,17 @@
   --color-charcoal: #1a1a2e;
   --color-void: #050508;
   
-  --color-gold-50: #fbf7eb;
-  --color-gold-100: #f4eaab;
-  --color-gold-200: #ecd66f;
-  --color-gold-300: #e3bc35;
-  --color-gold-400: #d69c17;
-  --color-gold-500: #bc7c0a;
-  --color-gold-600: #975e07;
-  --color-gold-700: #714106;
-  --color-gold-800: #4c2805;
-  --color-gold-900: #291202;
+  --color-theme-50: rgb(var(--dyn-theme-50));
+  --color-theme-100: rgb(var(--dyn-theme-100));
+  --color-theme-200: rgb(var(--dyn-theme-200));
+  --color-theme-300: rgb(var(--dyn-theme-300));
+  --color-theme-400: rgb(var(--dyn-theme-400));
+  --color-theme-500: rgb(var(--dyn-theme-500));
+  --color-theme-600: rgb(var(--dyn-theme-600));
+  --color-theme-700: rgb(var(--dyn-theme-700));
+  --color-theme-800: rgb(var(--dyn-theme-800));
+  --color-theme-900: rgb(var(--dyn-theme-900));
+  --color-theme-950: rgb(var(--dyn-theme-950));
 
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-playfair), serif;
@@ -37,12 +38,26 @@
 :root {
   --background: #0a0a0f;
   --foreground: #ffffff;
+  
+  /* Default Theme (Orange) - overwritten by ThemeManager */
+  --dyn-theme-50: 255 247 237;
+  --dyn-theme-100: 255 237 213;
+  --dyn-theme-200: 254 215 170;
+  --dyn-theme-300: 253 186 116;
+  --dyn-theme-400: 251 146 60;
+  --dyn-theme-500: 249 115 22;
+  --dyn-theme-600: 234 88 12;
+  --dyn-theme-700: 194 65 12;
+  --dyn-theme-800: 154 52 18;
+  --dyn-theme-900: 124 45 18;
+  --dyn-theme-950: 67 20 7;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+  transition: --dyn-theme-50 0.5s ease, --dyn-theme-500 0.5s ease;
 }
 
 /* Custom Scrollbar */
@@ -53,35 +68,35 @@ body {
   background: #050508;
 }
 ::-webkit-scrollbar-thumb {
-  background: #bc7c0a;
+  background: rgb(var(--dyn-theme-500));
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d69c17;
+  background: rgb(var(--dyn-theme-400));
 }
 
 /* Glassmorphism utility classes */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(188, 124, 10, 0.15);
+  border: 1px solid rgba(var(--dyn-theme-500), 0.15);
 }
 
 .glass-premium {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(188, 124, 10, 0.25);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(var(--dyn-theme-500), 0.3);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(var(--dyn-theme-500), 0.05);
 }
 
-.gold-glow {
-  box-shadow: 0 0 15px rgba(214, 156, 23, 0.3);
+.theme-glow {
+  box-shadow: 0 0 20px rgba(var(--dyn-theme-400), 0.4);
 }
 
-.gold-glow-hover:hover {
-  box-shadow: 0 0 25px rgba(214, 156, 23, 0.5);
-  border-color: rgba(214, 156, 23, 0.6);
+.theme-glow-hover:hover {
+  box-shadow: 0 0 35px rgba(var(--dyn-theme-400), 0.6);
+  border-color: rgba(var(--dyn-theme-400), 0.7);
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }

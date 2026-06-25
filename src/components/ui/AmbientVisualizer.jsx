@@ -43,7 +43,12 @@ export default function AmbientVisualizer() {
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(253, 224, 71, ${this.opacity})`; // gold-300
+        
+        // Get the dynamic theme color from the root element
+        const rootStyle = getComputedStyle(document.documentElement);
+        const themeColor = rootStyle.getPropertyValue('--dyn-theme-500').trim() || '249 115 22';
+        
+        ctx.fillStyle = `rgba(${themeColor.split(' ').join(', ')}, ${this.opacity})`;
         ctx.fill();
       }
     }

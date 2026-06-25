@@ -10,7 +10,7 @@ const EffectSlider = ({ label, value, onChange, min, max, step = 1, unit = '' })
   <div className="flex flex-col gap-1.5">
     <div className="flex justify-between items-center">
       <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">{label}</span>
-      <span className="text-[9px] font-mono text-gold-400">
+      <span className="text-[9px] font-mono text-theme-400">
         {typeof value === 'number' ? (value > 0 && !label.includes('Reverb') && !label.includes('Wet') ? '+' : '') : ''}{value}{unit}
       </span>
     </div>
@@ -23,10 +23,10 @@ const EffectSlider = ({ label, value, onChange, min, max, step = 1, unit = '' })
       onChange={(e) => onChange(parseFloat(e.target.value))}
       className="w-full h-1.5 appearance-none rounded-full bg-void/60 cursor-pointer
         [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
-        [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gold-400
+        [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-theme-400
         [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(214,156,23,0.4)]
         [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
-        [&::-moz-range-thumb]:bg-gold-400 [&::-moz-range-thumb]:border-none"
+        [&::-moz-range-thumb]:bg-theme-400 [&::-moz-range-thumb]:border-none"
     />
   </div>
 );
@@ -149,7 +149,7 @@ export default function VoiceEffectsPanel({ vocalBuffer, voiceFootprint, isAutoV
     <div className="flex flex-col gap-5">
       {/* Presets */}
       <div className="flex flex-col gap-2">
-        <span className="text-[9px] font-mono text-gold-400 tracking-widest uppercase">Quick Presets</span>
+        <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase">Quick Presets</span>
         <div className="grid grid-cols-2 gap-2">
           {VOICE_EFFECTS_PRESETS.map((preset) => (
             <button
@@ -157,7 +157,7 @@ export default function VoiceEffectsPanel({ vocalBuffer, voiceFootprint, isAutoV
               onClick={() => applyPreset(preset)}
               className={`p-2.5 rounded-lg border text-left flex items-center gap-2 transition-all ${
                 activePreset === preset.id
-                  ? 'border-gold-400 bg-gold-500/10 text-white'
+                  ? 'border-theme-400 bg-theme-500/10 text-white'
                   : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
               }`}
             >
@@ -179,7 +179,7 @@ export default function VoiceEffectsPanel({ vocalBuffer, voiceFootprint, isAutoV
 
       {/* 3-Band EQ */}
       <div className="flex flex-col gap-1">
-        <span className="text-[9px] font-mono text-gold-400 tracking-widest uppercase mb-1">Equalizer</span>
+        <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase mb-1">Equalizer</span>
         <div className="grid grid-cols-3 gap-3">
           <EffectSlider label="Low" value={eqLow} onChange={setEqLow} min={-12} max={12} unit="dB" />
           <EffectSlider label="Mid" value={eqMid} onChange={setEqMid} min={-12} max={12} unit="dB" />
@@ -196,14 +196,14 @@ export default function VoiceEffectsPanel({ vocalBuffer, voiceFootprint, isAutoV
         <button
           onClick={() => setCompression(!compression)}
           className={`relative w-10 h-5 rounded-full transition-colors ${
-            compression ? 'bg-gold-500/40' : 'bg-zinc-700'
+            compression ? 'bg-theme-500/40' : 'bg-zinc-700'
           }`}
         >
           <motion.div
             animate={{ x: compression ? 20 : 2 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
             className={`absolute top-0.5 w-4 h-4 rounded-full ${
-              compression ? 'bg-gold-400' : 'bg-zinc-500'
+              compression ? 'bg-theme-400' : 'bg-zinc-500'
             }`}
           />
         </button>
@@ -235,7 +235,7 @@ export default function VoiceEffectsPanel({ vocalBuffer, voiceFootprint, isAutoV
             ? 'border-white/5 text-zinc-600 cursor-not-allowed bg-void/20'
             : isPreviewing
               ? 'border-red-500/30 bg-red-950/10 text-red-400 hover:bg-red-950/20'
-              : 'border-gold-500/20 bg-gold-500/10 text-gold-400 hover:bg-gold-500/20'
+              : 'border-theme-500/20 bg-theme-500/10 text-theme-400 hover:bg-theme-500/20'
         }`}
       >
         {isPreviewing ? '⏹ Stop Preview' : '▶ Preview With Effects'}

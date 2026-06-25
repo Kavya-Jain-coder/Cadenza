@@ -108,7 +108,7 @@ export default function GenrePrefStep() {
         </div>
 
         {/* Bottom/Right Input Region */}
-        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6">
           <div className="grid grid-cols-2 gap-3 mb-6 max-h-60 overflow-y-auto pr-1">
           {GENRES.map((genre) => {
             const isSelected = selectedGenres.includes(genre.id);
@@ -119,7 +119,7 @@ export default function GenrePrefStep() {
                 onClick={() => toggleGenre(genre.id)}
                 className={`p-3 rounded-lg border text-left flex items-center gap-3 transition-all ${
                   isSelected
-                    ? 'border-gold-400 bg-gold-500/10 text-white shadow-[0_0_15px_rgba(214,156,23,0.15)]'
+                    ? 'border-theme-400 bg-theme-500/10 text-white shadow-[0_0_15px_rgba(214,156,23,0.15)]'
                     : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                 }`}
               >

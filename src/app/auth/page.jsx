@@ -21,12 +21,12 @@ export default function WelcomeGate() {
           animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
           transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.2 }}
         >
-          <span className="text-[10px] tracking-[0.3em] font-mono text-gold-400 uppercase mb-3 block drop-shadow-md">
+          <span className="text-[10px] tracking-[0.3em] font-mono text-theme-400 uppercase mb-3 block drop-shadow-md">
             Welcome to Cadenza
           </span>
           <h1 className="font-serif text-5xl md:text-7xl text-white mb-4 tracking-wide leading-tight drop-shadow-xl">
             Create Music <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-200 to-gold-400 font-normal italic">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-theme-300 via-theme-200 to-theme-400 font-normal italic">
               With AI.
             </span>
           </h1>
@@ -36,17 +36,17 @@ export default function WelcomeGate() {
         </motion.div>
 
         {/* Bottom/Right Input Region */}
-        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6">
+        <GlassCard className="w-full max-w-sm md:mb-12 bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6">
           <div className="flex flex-col gap-3">
             <Link
               href="/auth/signup/username"
-              className="w-full py-3 rounded-lg text-xs font-mono tracking-widest uppercase bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-white font-bold border border-gold-400/20 hover:from-gold-500 hover:to-gold-400 hover:shadow-[0_4px_25px_rgba(188,124,10,0.35)] active:scale-[0.98] transition-all text-center"
+              className="w-full py-3 rounded-lg text-xs font-mono tracking-widest uppercase bg-gradient-to-r from-theme-600 via-theme-500 to-theme-600 text-white font-bold border border-theme-400/20 hover:from-theme-500 hover:to-theme-400 hover:shadow-[0_4px_25px_rgba(188,124,10,0.35)] active:scale-[0.98] transition-all text-center"
             >
               I'm new here
             </Link>
             <Link
               href="/auth/login/email"
-              className="w-full py-3 rounded-lg text-xs font-mono tracking-widest uppercase border border-gold-500/30 bg-white/5 text-gold-400 hover:bg-white/10 hover:border-gold-400 hover:text-white active:scale-[0.98] transition-all text-center"
+              className="w-full py-3 rounded-lg text-xs font-mono tracking-widest uppercase border border-theme-500/30 bg-white/5 text-theme-400 hover:bg-white/10 hover:border-theme-400 hover:text-white active:scale-[0.98] transition-all text-center"
             >
               I already have an account
             </Link>

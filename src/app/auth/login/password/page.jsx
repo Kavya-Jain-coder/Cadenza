@@ -97,7 +97,7 @@ export default function LoginPassword() {
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.4 }}
         >
-        <GlassCard className="w-full bg-obsidian/40 backdrop-blur-md border border-gold-500/20 shadow-2xl p-6" animate={false}>
+        <GlassCard className="w-full bg-obsidian/40 backdrop-blur-md border border-theme-500/20 shadow-2xl p-6" animate={false}>
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <AnimatedInput
             label="Password"
@@ -113,7 +113,7 @@ export default function LoginPassword() {
             <button
               type="button"
               onClick={handleForgotPassword}
-              className="text-[10px] font-mono tracking-widest text-gold-400 hover:text-gold-300 transition-colors uppercase"
+              className="text-[10px] font-mono tracking-widest text-theme-400 hover:text-theme-300 transition-colors uppercase"
             >
               Forgot Password?
             </button>

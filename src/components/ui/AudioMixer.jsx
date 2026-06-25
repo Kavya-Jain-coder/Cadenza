@@ -11,7 +11,7 @@ const VolumeSlider = ({ label, icon, value, onChange, color }) => (
     <div className="flex-1 flex flex-col gap-1.5">
       <div className="flex justify-between items-center">
         <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">{label}</span>
-        <span className="text-[9px] font-mono text-gold-400">{Math.round(value * 100)}%</span>
+        <span className="text-[9px] font-mono text-theme-400">{Math.round(value * 100)}%</span>
       </div>
       <input
         type="range"
@@ -20,10 +20,10 @@ const VolumeSlider = ({ label, icon, value, onChange, color }) => (
         onChange={(e) => onChange(parseFloat(e.target.value))}
         className="w-full h-1.5 appearance-none rounded-full bg-void/60 cursor-pointer
           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
-          [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gold-400
+          [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-theme-400
           [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(214,156,23,0.4)]
           [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
-          [&::-moz-range-thumb]:bg-gold-400 [&::-moz-range-thumb]:border-none"
+          [&::-moz-range-thumb]:bg-theme-400 [&::-moz-range-thumb]:border-none"
       />
     </div>
   </div>
@@ -129,7 +129,7 @@ export default function AudioMixer({
     <div className="flex flex-col gap-5">
       {/* Channel Faders */}
       <div className="flex flex-col gap-2">
-        <span className="text-[9px] font-mono text-gold-400 tracking-widest uppercase">Channel Mix</span>
+        <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase">Channel Mix</span>
         <VolumeSlider
           label="Instrumental"
           icon="🎵"
@@ -151,7 +151,7 @@ export default function AudioMixer({
           disabled={!canMix}
           className={`w-full py-3 rounded-lg text-[10px] font-mono tracking-widest uppercase transition-all flex items-center justify-center gap-2 ${
             canMix
-              ? 'bg-gradient-to-r from-gold-600 to-gold-500 text-white hover:from-gold-500 hover:to-gold-400 font-bold shadow-[0_0_20px_rgba(214,156,23,0.15)]'
+              ? 'bg-gradient-to-r from-theme-600 to-theme-500 text-white hover:from-theme-500 hover:to-theme-400 font-bold shadow-[0_0_20px_rgba(214,156,23,0.15)]'
               : 'bg-void/30 border border-white/5 text-zinc-600 cursor-not-allowed'
           }`}
         >
@@ -161,9 +161,9 @@ export default function AudioMixer({
 
       {/* Progress Bar */}
       {isMixing && (
-        <div className="flex flex-col gap-3 p-4 rounded-lg border border-gold-500/10 bg-void/20">
+        <div className="flex flex-col gap-3 p-4 rounded-lg border border-theme-500/10 bg-void/20">
           <div className="flex justify-between items-center">
-            <span className="text-[9px] font-mono text-gold-400 tracking-widest uppercase">
+            <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase">
               Rendering final mix...
             </span>
             <span className="text-[9px] font-mono text-zinc-400">
@@ -172,14 +172,14 @@ export default function AudioMixer({
           </div>
           <div className="w-full h-1.5 bg-void/40 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-gold-600 to-gold-400 rounded-full"
+              className="h-full bg-gradient-to-r from-theme-600 to-theme-400 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${mixProgress}%` }}
               transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.5 }}
             />
           </div>
           <div className="flex items-center justify-center gap-2">
-            <div className="w-4 h-4 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
             <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
               Processing audio channels...
             </span>
@@ -189,10 +189,10 @@ export default function AudioMixer({
 
       {/* Result Preview */}
       {mixedUrl && !isMixing && (
-        <div className="flex flex-col gap-3 p-4 rounded-lg border border-gold-400/20 bg-gold-500/5">
+        <div className="flex flex-col gap-3 p-4 rounded-lg border border-theme-400/20 bg-theme-500/5">
           <div className="flex items-center gap-2">
             <span className="text-green-400 text-sm">✓</span>
-            <span className="text-[9px] font-mono text-gold-400 tracking-widest uppercase">
+            <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase">
               Mix Complete
             </span>
           </div>
@@ -200,7 +200,7 @@ export default function AudioMixer({
           <div className="flex gap-2">
             <button
               onClick={togglePlayback}
-              className="flex-1 py-2 rounded-lg border border-gold-500/20 bg-gold-500/10 text-gold-400 hover:bg-gold-500/20 transition-all text-[10px] font-mono tracking-widest uppercase flex items-center justify-center gap-2"
+              className="flex-1 py-2 rounded-lg border border-theme-500/20 bg-theme-500/10 text-theme-400 hover:bg-theme-500/20 transition-all text-[10px] font-mono tracking-widest uppercase flex items-center justify-center gap-2"
             >
               {isPlaying ? '⏸ Pause' : '▶ Play Mix'}
             </button>

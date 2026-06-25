@@ -10,7 +10,7 @@ export default function MuteToggle({ isMuted, onToggle }) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       transition={{ ease: [0.34, 1.56, 0.64, 1], duration: 0.25 }}
-      className="p-2 rounded-full border border-gold-500/20 bg-void/50 hover:bg-gold-950/20 hover:border-gold-500/40 text-gold-400 transition-colors"
+      className="p-2 rounded-full border border-theme-500/20 bg-void/50 hover:bg-theme-950/20 hover:border-theme-500/40 text-theme-400 transition-colors"
       aria-label={isMuted ? "Unmute audio" : "Mute audio"}
     >
       {isMuted ? (

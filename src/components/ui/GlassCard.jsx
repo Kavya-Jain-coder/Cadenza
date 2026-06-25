@@ -10,7 +10,7 @@ export default function GlassCard({
   ...props
 }) {
   const cardClasses = `glass-premium rounded-2xl p-6 md:p-8 backdrop-blur-xl relative overflow-hidden ${
-    hoverGlow ? 'gold-glow-hover' : ''
+    hoverGlow ? 'theme-glow-hover' : ''
   } ${className}`;
 
   if (!animate) {

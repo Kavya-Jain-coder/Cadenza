@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Providers from "@/components/layout/Providers";
 import AmbientVisualizer from "@/components/ui/AmbientVisualizer";
+import ThemeManager from "@/components/layout/ThemeManager";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -39,6 +40,7 @@ export default async function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
         <Providers session={session}>
+          <ThemeManager />
           <AmbientVisualizer />
           <Navbar />
           {children}

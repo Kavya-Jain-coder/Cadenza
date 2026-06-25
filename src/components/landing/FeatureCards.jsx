@@ -33,7 +33,7 @@ export default function FeatureCards() {
 
       <div className="max-w-7xl mx-auto w-full relative z-10 select-none">
         <div className="text-center mb-16">
-          <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+          <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
             Capabilities
           </span>
           <h2 className="font-serif text-3xl md:text-5xl text-white tracking-wide">
@@ -61,10 +61,10 @@ export default function FeatureCards() {
             >
               <GlassCard
                 animate={false} // Disable default glasscard animation so stagger controls it
-                className="flex flex-col gap-4 text-center items-center p-8 border border-gold-500/10 hover:border-gold-500/30 transition-all hover:scale-[1.02] hover:-translate-y-1 h-full"
+                className="flex flex-col gap-4 text-center items-center p-8 border border-theme-500/10 hover:border-theme-500/30 transition-all hover:scale-[1.02] hover:-translate-y-1 h-full"
                 hoverGlow
               >
-                <div className="w-16 h-16 rounded-full bg-gold-950/20 border border-gold-500/20 flex items-center justify-center text-3xl mb-2 text-gold-400 shadow-[0_0_15px_rgba(188,124,10,0.1)]">
+                <div className="w-16 h-16 rounded-full bg-theme-950/20 border border-theme-500/20 flex items-center justify-center text-3xl mb-2 text-theme-400 shadow-[0_0_15px_rgba(188,124,10,0.1)]">
                   {feature.icon}
                 </div>
                 <h3 className="font-serif text-xl text-white tracking-wider">{feature.title}</h3>

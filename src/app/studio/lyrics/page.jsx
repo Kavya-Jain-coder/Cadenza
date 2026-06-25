@@ -168,7 +168,7 @@ export default function LyricStudio() {
               transition={{ ease: primaryEase, duration: 0.5 }}
             >
               <GlassCard className="text-center">
-                <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+                <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
                   LYRIC STUDIO · STEP 1 OF 4
                 </span>
                 <h2 className="font-serif text-3xl text-white mb-6">
@@ -181,7 +181,7 @@ export default function LyricStudio() {
                       onClick={() => setLanguage(lang.code)}
                       className={`p-4 rounded-xl border font-mono tracking-wider text-xs uppercase transition-all ${
                         language === lang.code
-                          ? 'border-gold-400 bg-gold-500/10 text-white shadow-[0_0_15px_rgba(214,156,23,0.2)]'
+                          ? 'border-theme-400 bg-theme-500/10 text-white shadow-[0_0_15px_rgba(214,156,23,0.2)]'
                           : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                       }`}
                     >
@@ -206,7 +206,7 @@ export default function LyricStudio() {
               transition={{ ease: primaryEase, duration: 0.5 }}
             >
               <GlassCard>
-                <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+                <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
                   LYRIC STUDIO · STEP 2 OF 4
                 </span>
                 <h2 className="font-serif text-3xl text-white mb-2">
@@ -249,7 +249,7 @@ export default function LyricStudio() {
                   style={{ backgroundImage: `url(/background_images/3301.jpg)` }}
                 />
 
-                <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+                <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
                   LYRIC STUDIO · STEP 3 OF 4
                 </span>
                 <h2 className="font-serif text-3xl text-white mb-6">
@@ -263,7 +263,7 @@ export default function LyricStudio() {
                       onClick={() => setSelectedGenre(genre.id)}
                       className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${
                         selectedGenre === genre.id
-                          ? 'border-gold-400 bg-gold-500/10 text-white shadow-[0_0_15px_rgba(214,156,23,0.2)] scale-[1.02]'
+                          ? 'border-theme-400 bg-theme-500/10 text-white shadow-[0_0_15px_rgba(214,156,23,0.2)] scale-[1.02]'
                           : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                       }`}
                     >
@@ -291,7 +291,7 @@ export default function LyricStudio() {
               transition={{ ease: primaryEase, duration: 0.5 }}
             >
               <GlassCard>
-                <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+                <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
                   LYRIC STUDIO · STEP 4 OF 4
                 </span>
                 <h2 className="font-serif text-3xl text-white mb-6">
@@ -301,7 +301,7 @@ export default function LyricStudio() {
                 <div className="space-y-6">
                   {/* Mood Select */}
                   <div>
-                    <span className="block text-[10px] tracking-widest font-mono text-gold-400 uppercase mb-2">Mood</span>
+                    <span className="block text-[10px] tracking-widest font-mono text-theme-400 uppercase mb-2">Mood</span>
                     <div className="flex flex-wrap gap-2">
                       {['Happy', 'Sad', 'Angry', 'Nostalgic', 'Romantic'].map((m) => (
                         <button
@@ -309,7 +309,7 @@ export default function LyricStudio() {
                           onClick={() => setMood(m)}
                           className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all ${
                             mood === m
-                              ? 'border-gold-400 bg-gold-500/10 text-white'
+                              ? 'border-theme-400 bg-theme-500/10 text-white'
                               : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                           }`}
                         >
@@ -321,7 +321,7 @@ export default function LyricStudio() {
 
                   {/* Tempo Select */}
                   <div>
-                    <span className="block text-[10px] tracking-widest font-mono text-gold-400 uppercase mb-2">Tempo</span>
+                    <span className="block text-[10px] tracking-widest font-mono text-theme-400 uppercase mb-2">Tempo</span>
                     <div className="flex gap-2">
                       {['Slow', 'Mid', 'Fast'].map((t) => (
                         <button
@@ -329,7 +329,7 @@ export default function LyricStudio() {
                           onClick={() => setTempo(t)}
                           className={`flex-1 py-2 rounded-lg border text-xs font-mono transition-all ${
                             tempo === t
-                              ? 'border-gold-400 bg-gold-500/10 text-white'
+                              ? 'border-theme-400 bg-theme-500/10 text-white'
                               : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                           }`}
                         >
@@ -341,7 +341,7 @@ export default function LyricStudio() {
 
                   {/* Structure Select */}
                   <div>
-                    <span className="block text-[10px] tracking-widest font-mono text-gold-400 uppercase mb-2">Structure</span>
+                    <span className="block text-[10px] tracking-widest font-mono text-theme-400 uppercase mb-2">Structure</span>
                     <div className="flex gap-2">
                       {[
                         { id: 'verse-chorus-verse', name: 'Verse-Chorus-Verse' },
@@ -353,7 +353,7 @@ export default function LyricStudio() {
                           onClick={() => setStructure(s.id)}
                           className={`flex-1 py-2 rounded-lg border text-xs font-mono transition-all ${
                             structure === s.id
-                              ? 'border-gold-400 bg-gold-500/10 text-white'
+                              ? 'border-theme-400 bg-theme-500/10 text-white'
                               : 'border-white/10 bg-void/40 text-zinc-400 hover:border-white/20'
                           }`}
                         >
@@ -388,7 +388,7 @@ export default function LyricStudio() {
                       {[...Array(8)].map((_, i) => (
                         <motion.div
                           key={i}
-                          className="w-[3px] bg-gold-400 rounded-full"
+                          className="w-[3px] bg-theme-400 rounded-full"
                           animate={{
                             height: [8, 36, 8]
                           }}
@@ -408,9 +408,9 @@ export default function LyricStudio() {
                 </GlassCard>
               ) : (
                 <GlassCard className="w-full">
-                  <div className="flex justify-between items-center border-b border-gold-500/10 pb-4 mb-6">
+                  <div className="flex justify-between items-center border-b border-theme-500/10 pb-4 mb-6">
                     <div>
-                      <span className="text-[9px] font-mono text-gold-400 tracking-widest uppercase block mb-1">
+                      <span className="text-[9px] font-mono text-theme-400 tracking-widest uppercase block mb-1">
                         AI GENERATED LYRICS
                       </span>
                       <h2 className="font-serif text-2xl text-white">
@@ -447,7 +447,7 @@ export default function LyricStudio() {
                   <div className="space-y-6 max-h-[450px] overflow-y-auto pr-2">
                     {generatedLyrics?.sections.map((section, sIdx) => (
                       <div key={sIdx} className="p-4 rounded-xl border border-white/5 bg-void/20">
-                        <span className="text-[10px] font-mono text-gold-400 tracking-wider uppercase block mb-3">
+                        <span className="text-[10px] font-mono text-theme-400 tracking-wider uppercase block mb-3">
                           {section.label}
                         </span>
                         <div className="space-y-2">
@@ -457,7 +457,7 @@ export default function LyricStudio() {
                               type="text"
                               value={line}
                               onChange={(e) => handleLineChange(sIdx, lIdx, e.target.value)}
-                              className="w-full bg-transparent text-sm text-zinc-300 hover:text-white focus:text-white focus:outline-none border-b border-transparent hover:border-white/10 focus:border-gold-400/50 py-1 transition-all"
+                              className="w-full bg-transparent text-sm text-zinc-300 hover:text-white focus:text-white focus:outline-none border-b border-transparent hover:border-white/10 focus:border-theme-400/50 py-1 transition-all"
                             />
                           ))}
                         </div>

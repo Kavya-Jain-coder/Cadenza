@@ -14,11 +14,11 @@ export default function NotFound() {
 
       <GlassCard className="max-w-md w-full text-center relative z-10 select-none">
         <div
-          className="w-32 h-32 mx-auto rounded-full bg-cover bg-center border-2 border-gold-500/20 shadow-[0_0_20px_rgba(188,124,10,0.15)] mb-6 opacity-85"
+          className="w-32 h-32 mx-auto rounded-full bg-cover bg-center border-2 border-theme-500/20 shadow-[0_0_20px_rgba(188,124,10,0.15)] mb-6 opacity-85"
           style={{ backgroundImage: 'url(/background_images/cute-cat-indoors.jpg)' }}
         />
         
-        <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+        <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
           Error 404
         </span>
         <h2 className="font-serif text-2xl text-white mb-3">Lost in the mix</h2>

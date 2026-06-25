@@ -123,7 +123,7 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto w-full relative z-10 flex-grow flex flex-col">
         {/* Header Title */}
         <div className="mb-8 select-none">
-          <span className="text-[10px] tracking-[0.25em] font-mono text-gold-400 uppercase mb-2 block">
+          <span className="text-[10px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-2 block">
             Creations Hub
           </span>
           <h1 className="font-serif text-3xl md:text-4xl text-white tracking-wide">
@@ -138,7 +138,7 @@ export default function Dashboard() {
 
         {isLoading ? (
           <div className="flex-grow flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
           </div>
         ) : !hasCreations ? (
           <div className="flex-grow flex items-center justify-center">
@@ -153,14 +153,14 @@ export default function Dashboard() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`pb-2 px-1 text-[10px] font-mono tracking-widest uppercase transition-colors relative whitespace-nowrap ${
-                    activeTab === tab.id ? 'text-gold-400' : 'text-zinc-500 hover:text-zinc-300'
+                    activeTab === tab.id ? 'text-theme-400' : 'text-zinc-500 hover:text-zinc-300'
                   }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
                     <motion.div
                       layoutId="activeDashboardTab"
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-gold-400"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-theme-400"
                       transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.3 }}
                     />
                   )}

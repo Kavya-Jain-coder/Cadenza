@@ -263,7 +263,7 @@ export default function VoiceRecorder({
       </AnimatePresence>
 
       {/* Live Frequency Visualizer */}
-      <div className="w-full h-24 bg-void/40 rounded-xl border border-gold-500/10 overflow-hidden relative">
+      <div className="w-full h-24 bg-void/40 rounded-xl border border-theme-500/10 overflow-hidden relative">
         {state === 'recording' ? (
           <canvas
             ref={canvasRef}
@@ -279,7 +279,7 @@ export default function VoiceRecorder({
                 return (
                   <div
                     key={i}
-                    className="w-[6px] rounded-full bg-gold-400/40"
+                    className="w-[6px] rounded-full bg-theme-400/40"
                     style={{ height: `${height}px` }}
                   />
                 );
@@ -329,7 +329,7 @@ export default function VoiceRecorder({
 
         {state === 'requesting' && (
           <div className="w-16 h-16 rounded-full border-4 border-zinc-700 flex items-center justify-center">
-            <div className="w-5 h-5 border-2 border-gold-400/20 border-t-gold-400 rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
           </div>
         )}
 
@@ -351,7 +351,7 @@ export default function VoiceRecorder({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={togglePlayback}
-              className="px-4 py-2 rounded-lg bg-gold-500/10 border border-gold-500/20 text-gold-400 hover:bg-gold-500/20 transition-all text-[10px] font-mono tracking-widest uppercase flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-theme-500/10 border border-theme-500/20 text-theme-400 hover:bg-theme-500/20 transition-all text-[10px] font-mono tracking-widest uppercase flex items-center gap-2"
             >
               {isPlaying ? (
                 <>

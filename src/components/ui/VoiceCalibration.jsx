@@ -146,7 +146,7 @@ export default function VoiceCalibration() {
     <div className="bg-void/40 border border-white/5 rounded-xl p-6 shadow-xl relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-gold-400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-theme-400">
           <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
           <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
           <line x1="12" x2="12" y1="19" y2="22"/>
@@ -173,9 +173,9 @@ export default function VoiceCalibration() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-zinc-900/50 border border-gold-500/20 rounded-lg p-4"
+                className="bg-zinc-900/50 border border-theme-500/20 rounded-lg p-4"
               >
-                <p className="text-[10px] font-mono tracking-widest text-gold-400 uppercase mb-2 animate-pulse">
+                <p className="text-[10px] font-mono tracking-widest text-theme-400 uppercase mb-2 animate-pulse">
                   Read aloud clearly:
                 </p>
                 <p className="text-lg text-white font-serif italic">
@@ -194,7 +194,7 @@ export default function VoiceCalibration() {
           {state === 'idle' || state === 'completed' || state === 'error' ? (
             <button
               onClick={startCalibration}
-              className="px-6 py-3 rounded-full bg-void border border-gold-500/30 text-gold-400 font-mono text-xs tracking-widest uppercase hover:bg-gold-500/10 transition-colors shadow-[0_0_15px_rgba(251,191,36,0.1)] hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]"
+              className="px-6 py-3 rounded-full bg-void border border-theme-500/30 text-theme-400 font-mono text-xs tracking-widest uppercase hover:bg-theme-500/10 transition-colors shadow-[0_0_15px_rgba(251,191,36,0.1)] hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]"
             >
               {hasExistingProfile ? 'Re-calibrate' : 'Start Calibration'}
             </button>
