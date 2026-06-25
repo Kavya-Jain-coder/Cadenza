@@ -5,6 +5,8 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function CustomCursor() {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -13,8 +15,11 @@ export default function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Check if device has touch capability to hide cursor on mobile
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    setIsMounted(true);
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      setIsTouchDevice(true);
+      return;
+    }
 
     const moveCursor = (e) => {
       cursorX.set(e.clientX - 16);
@@ -45,8 +50,7 @@ export default function CustomCursor() {
     };
   }, [cursorX, cursorY]);
 
-  // If touch device, don't render custom cursor
-  if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
+  if (!isMounted || isTouchDevice) {
     return null;
   }
 
