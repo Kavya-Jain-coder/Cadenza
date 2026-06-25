@@ -32,13 +32,13 @@ export default function BackgroundImage({ route }) {
           <motion.div
             key={bgPath}
             initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 0.9, scale: 1.05, x: mouseX, y: mouseY }}
+            animate={{ opacity: 0.15, scale: 1.1, x: mouseX, y: mouseY }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ 
-              opacity: { ease: [0.22, 1, 0.36, 1], duration: 1.2 },
-              scale: { ease: [0.22, 1, 0.36, 1], duration: 1.2 }
+              opacity: { ease: [0.22, 1, 0.36, 1], duration: 1.5 },
+              scale: { ease: [0.22, 1, 0.36, 1], duration: 1.5 }
             }}
-            className="absolute -inset-10 bg-cover bg-center bg-no-repeat will-change-transform"
+            className="absolute -inset-20 bg-cover bg-center bg-no-repeat bg-fixed will-change-transform blur-[120px]"
             style={{ backgroundImage: `url("${bgPath}")` }}
           />
         )}

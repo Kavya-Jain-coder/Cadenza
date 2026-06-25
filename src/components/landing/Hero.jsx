@@ -48,18 +48,22 @@ export default function Hero() {
           transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.5, delay: 0.4 }}
           className="flex flex-col sm:flex-row justify-center gap-4"
         >
-          <Link
-            href="/auth"
-            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase bg-gradient-to-r from-theme-600 via-theme-500 to-theme-600 text-white font-bold border border-theme-400/20 hover:from-theme-500 hover:to-theme-400 hover:shadow-[0_4px_30px_rgba(188,124,10,0.45)] transition-all active:scale-[0.98]"
-          >
-            Launch Studio Free
-          </Link>
-          <a
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/auth"
+              className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase bg-gradient-to-r from-theme-600 via-theme-500 to-theme-600 text-white font-bold border border-theme-400/20 hover:from-theme-500 hover:to-theme-400 hover:shadow-[0_4px_30px_rgba(var(--dyn-theme-500),0.45)] transition-all inline-block w-full"
+            >
+              Launch Studio Free
+            </Link>
+          </motion.div>
+          <motion.a
             href="#features"
-            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase border border-theme-500/20 bg-void/30 text-theme-400 hover:bg-theme-500/10 hover:border-theme-400 hover:text-white transition-all active:scale-[0.98]"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3.5 rounded-lg text-xs font-mono tracking-widest uppercase border border-theme-500/20 bg-void/30 text-theme-400 hover:bg-theme-500/10 hover:border-theme-400 hover:text-white transition-all inline-block w-full"
           >
             Explore Features
-          </a>
+          </motion.a>
         </motion.div>
       </div>
     </section>

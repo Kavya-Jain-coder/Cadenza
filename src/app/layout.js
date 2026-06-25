@@ -1,12 +1,12 @@
-import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
+import { Outfit, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Providers from "@/components/layout/Providers";
 import AmbientVisualizer from "@/components/ui/AmbientVisualizer";
 import ThemeManager from "@/components/layout/ThemeManager";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${outfit.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
         <Providers session={session}>
