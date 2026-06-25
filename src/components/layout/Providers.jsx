@@ -3,9 +3,9 @@
 import { SessionProvider } from 'next-auth/react';
 import { SignupProvider } from '@/contexts/SignupContext';
 
-export default function Providers({ children }) {
+export default function Providers({ children, session }) {
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <SignupProvider>
         {children}
       </SignupProvider>

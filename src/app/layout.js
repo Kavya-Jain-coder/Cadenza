@@ -27,14 +27,18 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+import { auth } from "@/lib/auth";
+
+export default async function RootLayout({ children }) {
+  const session = await auth();
+
   return (
     <html
       lang="en"
       className={`${playfair.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
-        <Providers>
+        <Providers session={session}>
           <AmbientVisualizer />
           <Navbar />
           {children}

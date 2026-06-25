@@ -22,7 +22,9 @@ export default function Dashboard() {
 
   // Redirect if not authenticated
   useEffect(() => {
+    console.log('[Dashboard] Session status changed:', status);
     if (status === 'unauthenticated') {
+      console.warn('[Dashboard] status === unauthenticated, redirecting to /auth');
       router.push('/auth');
     }
   }, [status, router]);
@@ -30,8 +32,11 @@ export default function Dashboard() {
   const fetchCreations = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/creations');
+      console.log('[Dashboard] Fetching creations...');
+      const res = await fetch('/api/creations', { credentials: 'include' });
+      console.log('[Dashboard] Creations API status:', res.status);
       if (res.status === 401) {
+        console.warn('[Dashboard] Creations API returned 401, redirecting to /auth');
         router.push('/auth');
         return;
       }
@@ -43,6 +48,7 @@ export default function Dashboard() {
         setCreations(data);
       }
     } catch (e) {
+      console.error('[Dashboard] Fetch error:', e);
       setToastType('error');
       setToastMessage('Failed to connect to studio index');
     } finally {
