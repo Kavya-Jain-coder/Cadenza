@@ -141,7 +141,7 @@ function AudioWaveformCore({ showcaseScroll, catalogScroll }) {
 export default function DashboardScene({ showcaseScroll, catalogScroll }) {
   return (
     <div className="fixed inset-0 w-full h-full -z-20 pointer-events-none">
-      <Canvas dpr={[1, 2]}>
+      <Canvas dpr={1}>
         <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={45} />
         
         {/* Environment adds gorgeous realistic reflections to the metal materials */}
