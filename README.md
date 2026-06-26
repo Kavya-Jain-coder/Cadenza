@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/favicon.ico" alt="Cadenza Logo" width="100" />
+  <img src="public/icon.svg" alt="Cadenza Logo" width="100" />
   <h1>Cadenza</h1>
   <p><strong>The Ultimate AI-Powered Music Generation Platform</strong></p>
 </div>
