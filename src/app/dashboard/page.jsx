@@ -19,6 +19,7 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+  const [selectedIds, setSelectedIds] = useState(new Set());
   
   // Stage 2: Feature Showcase (Scrollytelling track)
   const showcaseRef = useRef(null);
@@ -71,19 +72,77 @@ export default function Dashboard() {
     }
   }, [status]);
 
+  const handleToggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const handleSelectAll = () => {
+    const items = getFilteredItems();
+    if (selectedIds.size === items.length && items.length > 0) {
+      setSelectedIds(new Set()); // deselect all
+    } else {
+      setSelectedIds(new Set(items.map(i => i.id)));
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    const items = getFilteredItems();
+    const itemsToDelete = items.filter(i => selectedIds.has(i.id));
+    if (itemsToDelete.length === 0) return;
+
+    const prevCreations = { ...creations };
+    const newCreations = { ...creations };
+    
+    newCreations.lyrics = newCreations.lyrics.filter(i => !selectedIds.has(i.id));
+    newCreations.instrumentals = newCreations.instrumentals.filter(i => !selectedIds.has(i.id));
+    newCreations.tracks = newCreations.tracks.filter(i => !selectedIds.has(i.id));
+    
+    setCreations(newCreations);
+    setSelectedIds(new Set());
+    setToastType('success');
+    setToastMessage(`Deleted ${itemsToDelete.length} item${itemsToDelete.length > 1 ? 's' : ''}`);
+
+    try {
+      await Promise.all(itemsToDelete.map(item => 
+        fetch(`/api/creations?id=${item.id}&type=${item.type}`, { method: 'DELETE' })
+      ));
+    } catch (e) {
+      console.error("Bulk delete failed", e);
+    }
+  };
+
   const handleDelete = async (id, type) => {
+    // Optimistic UI update
+    const prevCreations = { ...creations };
+    const newCreations = { ...creations };
+    
+    if (type === 'lyric') {
+      newCreations.lyrics = newCreations.lyrics.filter(item => item.id !== id);
+    } else if (type === 'instrumental') {
+      newCreations.instrumentals = newCreations.instrumentals.filter(item => item.id !== id);
+    } else if (type === 'track') {
+      newCreations.tracks = newCreations.tracks.filter(item => item.id !== id);
+    }
+    
+    setCreations(newCreations);
+    setToastType('success');
+    setToastMessage('Item deleted');
+
     try {
       const res = await fetch(`/api/creations?id=${id}&type=${type}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.error) {
+        setCreations(prevCreations);
         setToastType('error');
         setToastMessage(data.error);
-      } else {
-        setToastType('success');
-        setToastMessage('Item deleted successfully');
-        fetchCreations();
       }
     } catch (e) {
+      setCreations(prevCreations);
       setToastType('error');
       setToastMessage('Unable to complete deletion');
     }
@@ -214,28 +273,49 @@ export default function Dashboard() {
           <div className="flex flex-col gap-10">
             
             {/* Redesigned Pill Tabs */}
-            <div className="flex overflow-x-auto gap-2 md:gap-3 select-none pb-2 hide-scrollbar">
-              {tabs.map((tab) => {
-                const isActive = activeTab === tab.id;
-                return (
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 select-none pb-2">
+              <div className="flex overflow-x-auto gap-2 md:gap-3 hide-scrollbar">
+                {tabs.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`relative px-6 py-3 rounded-full text-[11px] font-mono tracking-widest uppercase transition-all duration-300 whitespace-nowrap z-10 glass hover:theme-glow-hover ${
+                        isActive ? 'text-white font-bold border-theme-400/50 shadow-[0_0_20px_rgba(var(--dyn-theme-500),0.3)]' : 'text-zinc-400 border-white/5'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activePillTab"
+                          className="absolute inset-0 bg-theme-500/20 rounded-full -z-10"
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {filteredItems.length > 0 && (
+                <div className="flex items-center gap-3 self-end md:self-auto">
+                  {selectedIds.size > 0 && (
+                    <button
+                      onClick={handleDeleteSelected}
+                      className="px-4 py-2 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-mono tracking-widest uppercase hover:bg-red-500/30 hover:text-red-300 transition-colors flex items-center gap-2"
+                    >
+                      Delete Selected ({selectedIds.size})
+                    </button>
+                  )}
                   <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`relative px-6 py-3 rounded-full text-[11px] font-mono tracking-widest uppercase transition-all duration-300 whitespace-nowrap z-10 glass hover:theme-glow-hover ${
-                      isActive ? 'text-white font-bold border-theme-400/50 shadow-[0_0_20px_rgba(var(--dyn-theme-500),0.3)]' : 'text-zinc-400 border-white/5'
-                    }`}
+                    onClick={handleSelectAll}
+                    className="px-4 py-2 rounded-full bg-white/5 text-zinc-300 border border-white/10 text-[10px] font-mono tracking-widest uppercase hover:bg-white/10 hover:text-white transition-colors"
                   >
-                    {isActive && (
-                      <motion.div
-                        layoutId="activePillTab"
-                        className="absolute inset-0 bg-theme-500/20 rounded-full -z-10"
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                      />
-                    )}
-                    {tab.label}
+                    {selectedIds.size === filteredItems.length ? 'Deselect All' : 'Select All'}
                   </button>
-                );
-              })}
+                </div>
+              )}
             </div>
 
             {/* Creations Grid */}
@@ -264,6 +344,8 @@ export default function Dashboard() {
                         creation={item}
                         type={item.type}
                         onDelete={handleDelete}
+                        isSelected={selectedIds.has(item.id)}
+                        onToggleSelect={handleToggleSelect}
                       />
                     </motion.div>
                   ))}

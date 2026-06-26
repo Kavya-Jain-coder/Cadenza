@@ -2,8 +2,7 @@
  * Audio processing utilities for Cadenza Voice Studio.
  * All processing runs client-side using the Web Audio API — zero server cost.
  */
-import lamejs from 'lamejs';
-
+import lamejs from './lamejs-min.js';
 // ──────────────────────────────────────────────
 // 1. Impulse Response Generator (synthetic reverb)
 // ──────────────────────────────────────────────

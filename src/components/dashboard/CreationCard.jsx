@@ -6,7 +6,7 @@ import WaveformVisualizer from '../ui/WaveformVisualizer';
 import Button from '../ui/Button';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
-export default function CreationCard({ creation, type, onDelete }) {
+export default function CreationCard({ creation, type, onDelete, isSelected, onToggleSelect }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   // Holographic Tilt Logic
@@ -58,7 +58,7 @@ export default function CreationCard({ creation, type, onDelete }) {
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative rounded-[2rem] p-[1px] bg-gradient-to-br from-theme-400/30 via-transparent to-theme-600/10 group h-full flex flex-col hover:theme-glow-hover transition-shadow duration-300"
+      className={`relative rounded-[2rem] p-[1px] bg-gradient-to-br from-theme-400/30 via-transparent to-theme-600/10 group h-full flex flex-col hover:theme-glow-hover transition-shadow duration-300 ${isSelected ? 'theme-glow' : ''}`}
     >
       <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none">
         <motion.div 
@@ -71,7 +71,7 @@ export default function CreationCard({ creation, type, onDelete }) {
         />
       </div>
 
-      <div className="relative glass-premium rounded-[2rem] p-6 h-full flex flex-col justify-between overflow-hidden shadow-2xl">
+      <div className={`relative glass-premium rounded-[2rem] p-6 h-full flex flex-col justify-between overflow-hidden shadow-2xl transition-colors ${isSelected ? 'bg-theme-900/40 border-theme-500/50' : ''}`}>
         
         {/* Subtle abstract grain/texture */}
         <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -79,9 +79,21 @@ export default function CreationCard({ creation, type, onDelete }) {
         <div className="relative z-10" style={{ transform: "translateZ(20px)" }}>
           {/* Card Header */}
           <div className="flex justify-between items-center mb-6">
-            <span className={`px-3 py-1 rounded-full text-[9px] font-mono tracking-widest uppercase ${badgeStyles[type]}`}>
-              {type === 'lyric' ? 'Lyrics' : type === 'instrumental' ? 'Beat' : 'Full Mix'}
-            </span>
+            <div className="flex items-center gap-3">
+              {onToggleSelect && (
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleSelect(creation.id); }}
+                  className={`w-5 h-5 rounded flex items-center justify-center border transition-all ${isSelected ? 'bg-theme-500 border-theme-500 text-white' : 'border-white/20 hover:border-white/50 text-transparent'}`}
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+              )}
+              <span className={`px-3 py-1 rounded-full text-[9px] font-mono tracking-widest uppercase ${badgeStyles[type]}`}>
+                {type === 'lyric' ? 'Lyrics' : type === 'instrumental' ? 'Beat' : 'Full Mix'}
+              </span>
+            </div>
             <span className="text-[10px] font-mono text-theme-300 tracking-wider">
               {formatDate(creation.created_at)}
             </span>

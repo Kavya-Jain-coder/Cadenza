@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { VOICE_EFFECTS_PRESETS } from '@/lib/constants';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
@@ -12,9 +12,41 @@ import WaveformVisualizer from '@/components/ui/WaveformVisualizer';
 import VoiceRecorder from '@/components/ui/VoiceRecorder';
 import VoiceEffectsPanel from '@/components/ui/VoiceEffectsPanel';
 import AudioMixer from '@/components/ui/AudioMixer';
-import StepIndicator from '@/components/ui/StepIndicator';
 import { fetchAndDecode, audioBufferToMp3 } from '@/lib/audio/audioUtils';
 import { saveAs } from 'file-saver';
+
+const BackgroundOrbs = () => (
+  <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="absolute inset-0 bg-zinc-950" />
+    <motion.div
+      animate={{
+        scale: [1, 1.2, 1],
+        x: [0, 100, 0],
+        y: [0, -50, 0],
+      }}
+      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      className="absolute top-[10%] left-[20%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] mix-blend-screen"
+    />
+    <motion.div
+      animate={{
+        scale: [1, 1.5, 1],
+        x: [0, -100, 0],
+        y: [0, 100, 0],
+      }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      className="absolute bottom-[20%] right-[10%] w-[600px] h-[600px] bg-zinc-500/10 rounded-full blur-[150px] mix-blend-screen"
+    />
+    <motion.div
+      animate={{
+        scale: [1, 1.1, 1],
+        opacity: [0.3, 0.5, 0.3],
+      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-zinc-600/5 rounded-full blur-[100px] mix-blend-screen"
+    />
+    <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+  </div>
+);
 
 function VoiceStudioContent() {
   const router = useRouter();
@@ -22,8 +54,8 @@ function VoiceStudioContent() {
   const { data: session, status } = useSession();
   const preselectedInstrumentalId = searchParams.get('instrumentalId');
 
-  // Step state: 1 = Setup & Record, 2 = Voice FX Studio, 3 = Mixing Desk
-  const [step, setStep] = useState(1);
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
 
   const [instrumentalList, setInstrumentalList] = useState([]);
   const [selectedInstId, setSelectedInstId] = useState(preselectedInstrumentalId || '');
@@ -173,14 +205,12 @@ function VoiceStudioContent() {
   const handleInstrumentalChange = (id) => {
     setSelectedInstId(id);
     loadLyricsForInstrumental(id, instrumentalList, allCreations.lyrics || []);
-    // Reset any existing recording when track changes
     setVocalBuffer(null);
     setVocalBlob(null);
     setMixedAudio(null);
     setIsAutoVocal(false);
   };
 
-  // Karaoke player sync triggers
   const handleRecordingStart = () => {
     const inst = instrumentalList.find((i) => i.id === selectedInstId);
     if (!inst) return;
@@ -239,11 +269,6 @@ function VoiceStudioContent() {
     setVocalBlob(blob);
   };
 
-  // Pause instrumental playback when switching steps
-  useEffect(() => {
-    handleRecordingStop();
-  }, [step]);
-
   const handleSaveMixedTrack = async () => {
     if (!mixedAudio) return;
 
@@ -291,7 +316,6 @@ function VoiceStudioContent() {
 
     setIsAutoSinging(true);
     try {
-      // Extract all lyric text
       const allText = lyricsData.sections.map(sec => sec.lines.join('. ')).join('. ');
       
       const res = await fetch('/api/tts', {
@@ -306,7 +330,6 @@ function VoiceStudioContent() {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       
       if (data.audioChunks && data.audioChunks.length > 0) {
-        // Decode all chunks
         const decodedBuffers = await Promise.all(data.audioChunks.map(async (b64) => {
           const binary = atob(b64);
           const bytes = new Uint8Array(binary.length);
@@ -314,7 +337,6 @@ function VoiceStudioContent() {
           return await audioCtx.decodeAudioData(bytes.buffer);
         }));
 
-        // Concatenate buffers
         let totalLength = 0;
         for (const buf of decodedBuffers) totalLength += buf.length;
         
@@ -341,8 +363,7 @@ function VoiceStudioContent() {
       }
       
       setToastType('success');
-      setToastMessage('Auto-Vocals generated successfully!');
-      setStep(2); // Move to FX stage
+      setToastMessage('Auto-Vocals generated successfully! Scroll down to add FX.');
     } catch (err) {
       console.error(err);
       setToastType('error');
@@ -352,241 +373,223 @@ function VoiceStudioContent() {
     }
   };
 
-    return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative py-24 bg-obsidian text-white">
-            
-      <div className="w-full max-w-4xl relative z-10">
-        {/* Step Indicator */}
-        <StepIndicator 
-          currentStep={step} 
-          totalSteps={3} 
-          label={
-            step === 1 ? "Record Vocals" : 
-            step === 2 ? "Voice Studio Effects" : 
-            "Mixing & Mastering"
-          } 
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch mt-4">
+  return (
+    <div className="relative min-h-screen text-white bg-zinc-950 font-sans selection:bg-white/30" ref={containerRef}>
+      <BackgroundOrbs />
+      
+      <div className="max-w-6xl mx-auto px-6 py-24 relative z-10 flex flex-col lg:flex-row gap-12 items-start">
+        
+        {/* Left Column: Scrollable Content Steps */}
+        <div className="flex-1 flex flex-col w-full">
           
-          {/* Main Controls Panel (Left Card) */}
-          <GlassCard className="flex flex-col gap-6">
-            <AnimatePresence mode="wait">
-              {step === 1 && (
-                <motion.div
-                  key="step1"
-                  initial={{ opacity: 0, x: -15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 15 }}
-                  className="flex flex-col gap-5 flex-grow"
-                >
-                  <div>
-                    <span className="text-[9px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-1 block">
-                      Step 1 of 3
-                    </span>
-                    <h2 className="font-serif text-2xl text-white mb-2">
-                      Record Your Vocal Take
-                    </h2>
-                    <p className="text-zinc-400 text-xs leading-relaxed">
-                      Select your backing track session, put on headphones, and tap record to sing.
-                    </p>
-                  </div>
+          {/* Step 1: Record Vocals */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="min-h-[80vh] flex flex-col justify-center py-12"
+          >
+            <GlassCard className="flex flex-col gap-8 p-8 md:p-12 bg-white/[0.02] border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+              <div>
+                <span className="text-[10px] tracking-[0.3em] font-mono text-zinc-500 uppercase mb-3 block">
+                  Stage 1
+                </span>
+                <h2 className="font-serif text-3xl md:text-4xl text-white mb-4 tracking-tight">
+                  Record Vocals
+                </h2>
+                <p className="text-zinc-400 text-sm leading-relaxed max-w-md">
+                  Select your backing track session, put on headphones, and tap record to sing.
+                </p>
+              </div>
 
-                  {/* Instrumental Selector */}
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center">
-                      <label className="text-[9px] tracking-widest font-mono text-theme-400 uppercase">
-                        Select backing session
-                      </label>
-                      {selectedInstId && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const inst = instrumentalList.find((i) => i.id === selectedInstId);
-                            const instNames = inst?.instruments?.map(i => i.name).join(',') || '';
-                            const lyricId = inst?.lyric_id || '';
-                            router.push(`/studio/instrumental?lyricId=${lyricId}&instruments=${instNames}`);
-                          }}
-                          className="text-[9px] font-mono text-theme-400 hover:text-white transition-colors underline uppercase tracking-wider cursor-pointer"
-                        >
-                          Modify Beat 🎵
-                        </button>
-                      )}
-                    </div>
-                    <select
-                      value={selectedInstId}
-                      onChange={(e) => handleInstrumentalChange(e.target.value)}
-                      disabled={instrumentalList.length === 0}
-                      className="w-full px-4 py-2.5 bg-void/60 text-white rounded-lg border border-white/10 focus:border-theme-400 focus:outline-none text-xs font-mono"
+              {/* Instrumental Selector */}
+              <div className="flex flex-col gap-3">
+                <div className="flex justify-between items-center">
+                  <label className="text-[10px] tracking-[0.2em] font-mono text-zinc-500 uppercase">
+                    Backing Session
+                  </label>
+                  {selectedInstId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const inst = instrumentalList.find((i) => i.id === selectedInstId);
+                        const instNames = inst?.instruments?.map(i => i.name).join(',') || '';
+                        const lyricId = inst?.lyric_id || '';
+                        router.push(`/studio/instrumental?lyricId=${lyricId}&instruments=${instNames}`);
+                      }}
+                      className="text-[10px] font-mono text-zinc-400 hover:text-white transition-colors underline uppercase tracking-wider"
                     >
-                      {instrumentalList.map((inst) => (
-                        <option key={inst.id} value={inst.id}>
-                          Beat Session: {inst.id.substring(0, 8)}... ({new Date(inst.created_at).toLocaleDateString()})
-                        </option>
-                      ))}
-                      {instrumentalList.length === 0 && (
-                        <option value="">No backing tracks available</option>
-                      )}
-                    </select>
-                  </div>
+                      Modify Beat 🎵
+                    </button>
+                  )}
+                </div>
+                <select
+                  value={selectedInstId}
+                  onChange={(e) => handleInstrumentalChange(e.target.value)}
+                  disabled={instrumentalList.length === 0}
+                  className="w-full px-5 py-3.5 bg-white/[0.03] text-white rounded-xl border border-white/10 focus:border-white/30 focus:outline-none text-sm font-mono appearance-none"
+                >
+                  {instrumentalList.map((inst) => (
+                    <option key={inst.id} value={inst.id} className="bg-zinc-900">
+                      Beat Session: {inst.id.substring(0, 8)}... ({new Date(inst.created_at).toLocaleDateString()})
+                    </option>
+                  ))}
+                  {instrumentalList.length === 0 && (
+                    <option value="" className="bg-zinc-900">No backing tracks available</option>
+                  )}
+                </select>
+              </div>
 
-                  {instrumentalList.length === 0 ? (
-                    <div className="flex flex-col gap-4 items-center justify-center p-8 border border-dashed border-white/10 rounded-xl bg-void/25">
-                      <span className="text-zinc-500 font-mono text-[9px] text-center uppercase tracking-wider">
-                        You need an instrumental session to record vocals.
+              {instrumentalList.length === 0 ? (
+                <div className="flex flex-col gap-4 items-center justify-center p-12 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+                  <span className="text-zinc-500 font-mono text-[10px] text-center uppercase tracking-widest max-w-[200px]">
+                    You need an instrumental session to record vocals.
+                  </span>
+                  <Button onClick={() => router.push('/studio/instrumental')} className="text-xs px-6 py-3">
+                    Create Backing Track
+                  </Button>
+                </div>
+              ) : (
+                <div className="p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
+                  {isDecodingInstrumental ? (
+                    <div className="flex flex-col items-center justify-center py-12 gap-4">
+                      <div className="w-8 h-8 border-2 border-white/10 border-t-white rounded-full animate-spin" />
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                        Loading backing track...
                       </span>
-                      <Button onClick={() => router.push('/studio/instrumental')} className="text-xs">
-                        Create Backing Track 🎵
-                      </Button>
                     </div>
                   ) : (
-                    <>
-                      {/* Voice Recorder Component */}
-                      <div className="p-4 rounded-xl border border-white/5 bg-void/20">
-                        {isDecodingInstrumental ? (
-                          <div className="flex flex-col items-center justify-center py-10 gap-2">
-                            <div className="w-6 h-6 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
-                            <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
-                              Loading backing track...
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col gap-6">
-                            <VoiceRecorder
-                              onRecordingStart={handleRecordingStart}
-                              onRecordingStop={handleRecordingStop}
-                              onRecordingReset={handleRecordingReset}
-                              onRecordingComplete={handleRecordingComplete}
-                            />
+                    <div className="flex flex-col gap-8">
+                      <VoiceRecorder
+                        onRecordingStart={handleRecordingStart}
+                        onRecordingStop={handleRecordingStop}
+                        onRecordingReset={handleRecordingReset}
+                        onRecordingComplete={handleRecordingComplete}
+                      />
 
-                            {/* Auto-Sing Option */}
-                            {voiceFootprint && (
-                              <div className="border-t border-white/10 pt-4 flex flex-col items-center gap-3">
-                                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
-                                  OR USE YOUR VOICE FOOTPRINT
-                                </span>
-                                <Button
-                                  variant="secondary"
-                                  onClick={handleAutoSing}
-                                  disabled={isAutoSinging || !lyricsData}
-                                  className="w-full text-xs py-3 border border-theme-500/30 text-theme-400 flex justify-center items-center gap-2 bg-theme-950/20 hover:bg-theme-950/40"
-                                >
-                                  {isAutoSinging ? (
-                                    <>
-                                      <div className="w-3 h-3 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
-                                      Generating Vocoder Track...
-                                    </>
-                                  ) : (
-                                    '🤖 Auto-Sing Lyrics (Vocoder)'
-                                  )}
-                                </Button>
-                              </div>
+                      {/* Auto-Sing Option */}
+                      {voiceFootprint && (
+                        <div className="border-t border-white/10 pt-6 flex flex-col items-center gap-4">
+                          <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                            OR USE AI VOCODER
+                          </span>
+                          <Button
+                            variant="secondary"
+                            onClick={handleAutoSing}
+                            disabled={isAutoSinging || !lyricsData}
+                            className="w-full text-xs py-4 border border-white/10 text-white flex justify-center items-center gap-3 bg-white/[0.03] hover:bg-white/[0.05]"
+                          >
+                            {isAutoSinging ? (
+                              <>
+                                <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                Generating Vocoder Track...
+                              </>
+                            ) : (
+                              '🤖 Auto-Sing Lyrics'
                             )}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Advance to Step 2 */}
-                      <Button
-                        disabled={!vocalBuffer}
-                        onClick={() => setStep(2)}
-                        className="w-full mt-2 font-bold"
-                      >
-                        Proceed to Voice FX Studio →
-                      </Button>
-                    </>
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   )}
-                </motion.div>
+                </div>
               )}
-
-              {step === 2 && (
-                <motion.div
-                  key="step2"
-                  initial={{ opacity: 0, x: -15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 15 }}
-                  className="flex flex-col gap-5 flex-grow"
-                >
-                  <div>
-                    <span className="text-[9px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-1 block">
-                      Step 2 of 3
-                    </span>
-                    <h2 className="font-serif text-2xl text-white mb-2">
-                      Voice FX Studio
-                    </h2>
-                    <p className="text-zinc-400 text-xs leading-relaxed">
-                      Polish your recording with vocal presets, reverb, compressor, equalizer, and pitch shift controls.
-                    </p>
-                  </div>
-
-                  {/* Effects Panel Component */}
-                  <div className="p-4 rounded-xl border border-white/5 bg-void/20">
-                    <VoiceEffectsPanel
-                      vocalBuffer={vocalBuffer}
-                      voiceFootprint={voiceFootprint}
-                      isAutoVocal={isAutoVocal}
-                      onEffectsChange={setEffectsOptions}
-                    />
-                  </div>
-
-                  <div className="flex gap-3 mt-2">
-                    <Button
-                      variant="secondary"
-                      onClick={() => setStep(1)}
-                      className="flex-1 text-zinc-400 border border-white/10 hover:border-white/20"
-                    >
-                      ← Back to Record
-                    </Button>
-                    <Button
-                      onClick={() => setStep(3)}
-                      className="flex-1 font-bold"
-                    >
-                      Next: Mixing Desk →
-                    </Button>
-                  </div>
-                </motion.div>
+              {vocalBuffer && (
+                <div className="flex justify-center mt-4">
+                  <span className="text-zinc-500 text-xs font-mono uppercase tracking-widest animate-pulse">
+                    ↓ Scroll down to apply effects
+                  </span>
+                </div>
               )}
+            </GlassCard>
+          </motion.div>
 
-              {step === 3 && (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, x: -15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 15 }}
-                  className="flex flex-col gap-5 flex-grow"
+          {/* Step 2: Voice FX Studio */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className={`min-h-[80vh] flex flex-col justify-center py-12 transition-opacity duration-700 ${!vocalBuffer ? 'opacity-30 pointer-events-none' : ''}`}
+          >
+            <GlassCard className="flex flex-col gap-8 p-8 md:p-12 bg-white/[0.02] border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+              <div>
+                <span className="text-[10px] tracking-[0.3em] font-mono text-zinc-500 uppercase mb-3 block">
+                  Stage 2
+                </span>
+                <h2 className="font-serif text-3xl md:text-4xl text-white mb-4 tracking-tight">
+                  Voice FX Studio
+                </h2>
+                <p className="text-zinc-400 text-sm leading-relaxed max-w-md">
+                  Polish your recording with vocal presets, reverb, compressor, equalizer, and pitch shift controls.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
+                <VoiceEffectsPanel
+                  vocalBuffer={vocalBuffer}
+                  voiceFootprint={voiceFootprint}
+                  isAutoVocal={isAutoVocal}
+                  onEffectsChange={setEffectsOptions}
+                />
+              </div>
+            </GlassCard>
+          </motion.div>
+
+          {/* Step 3: Mixing Desk */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className={`min-h-screen flex flex-col justify-center py-12 transition-opacity duration-700 ${!vocalBuffer ? 'opacity-30 pointer-events-none' : ''}`}
+          >
+            <GlassCard className="flex flex-col gap-8 p-8 md:p-12 bg-white/[0.02] border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+              <div>
+                <span className="text-[10px] tracking-[0.3em] font-mono text-zinc-500 uppercase mb-3 block">
+                  Stage 3
+                </span>
+                <h2 className="font-serif text-3xl md:text-4xl text-white mb-4 tracking-tight">
+                  Mixing Desk
+                </h2>
+                <p className="text-zinc-400 text-sm leading-relaxed max-w-md">
+                  Balance the volumes of your vocal track and your backing beat, then export the final mix.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
+                <AudioMixer
+                  vocalBuffer={vocalBuffer}
+                  instrumentalBuffer={instrumentalBuffer}
+                  effectsOptions={effectsOptions}
+                  voiceFootprint={voiceFootprint}
+                  isAutoVocal={isAutoVocal}
+                  onMixComplete={setMixedAudio}
+                />
+              </div>
+
+              {/* Master Output Preview right inline in Step 3 */}
+              {mixedAudio && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-6 flex flex-col gap-6 pt-8 border-t border-white/10"
                 >
-                  <div>
-                    <span className="text-[9px] tracking-[0.25em] font-mono text-theme-400 uppercase mb-1 block">
-                      Step 3 of 3
-                    </span>
-                    <h2 className="font-serif text-2xl text-white mb-2">
-                      Mixing Desk
-                    </h2>
-                    <p className="text-zinc-400 text-xs leading-relaxed">
-                      Balance the volumes of your vocal track and your backing beat, then export the final mix.
-                    </p>
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <h3 className="font-serif text-2xl text-white mb-1">Final Master Mix</h3>
+                      <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-mono">
+                        Ready to export • {Math.round(mixedAudio.duration)}s
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <WaveformVisualizer audioUrl={mixedAudio.blobUrl} />
                   </div>
 
-                  {/* Audio Mixer Component */}
-                  <div className="p-4 rounded-xl border border-white/5 bg-void/20">
-                    <AudioMixer
-                      vocalBuffer={vocalBuffer}
-                      instrumentalBuffer={instrumentalBuffer}
-                      effectsOptions={effectsOptions}
-                      voiceFootprint={voiceFootprint}
-                      isAutoVocal={isAutoVocal}
-                      onMixComplete={setMixedAudio}
-                    />
-                  </div>
-
-                  <div className="flex gap-3 mt-2">
-                    <Button
-                      variant="secondary"
-                      onClick={() => setStep(2)}
-                      className="text-zinc-400 border border-white/10 hover:border-white/20"
-                    >
-                      ← Back to FX
-                    </Button>
+                  <div className="flex flex-col sm:flex-row gap-4 mt-4">
                     <Button
                       variant="secondary"
                       onClick={() => {
@@ -604,79 +607,66 @@ function VoiceStudioContent() {
                         }
                       }}
                       disabled={!mixedAudio || isDownloading}
-                      className="flex-1 font-bold border border-white/10 hover:border-white/20"
+                      className="flex-1 font-bold py-4 bg-white/[0.05] border-white/10 hover:bg-white/[0.1] text-white"
                     >
                       {isDownloading ? 'Encoding MP3...' : '📥 Download Mix (.mp3)'}
                     </Button>
                     <Button
                       onClick={handleSaveMixedTrack}
                       disabled={!mixedAudio || isSaving}
-                      className="flex-1 font-bold"
+                      className="flex-1 font-bold py-4 bg-white text-black hover:bg-zinc-200"
                     >
                       {isSaving ? 'Saving Master...' : '💾 Save to Dashboard'}
                     </Button>
                   </div>
                 </motion.div>
               )}
-            </AnimatePresence>
-          </GlassCard>
+            </GlassCard>
+          </motion.div>
 
-          {/* Context Monitor (Right Card: Teleprompter / Visualizer Monitor) */}
-          <GlassCard className="flex flex-col gap-4">
-            <div className="flex justify-between items-center pb-2 border-b border-white/5">
-              <span className="text-[9px] tracking-widest font-mono text-theme-400 uppercase">
-                {step === 3 && mixedAudio ? "Master Output Preview" : "Vocal Teleprompter"}
-              </span>
-              <span className="px-2 py-0.5 rounded bg-theme-950/20 border border-theme-500/10 text-[8px] font-mono text-theme-300 uppercase">
-                {step === 1 ? "REC STATE" : step === 2 ? "VIRTUAL STUDIO" : "FINAL MASTER"}
-              </span>
-            </div>
+        </div>
 
-            {/* If step 3 is mixed, show final Master player */}
-            {step === 3 && mixedAudio ? (
-              <div className="flex flex-col gap-4 py-8 justify-center flex-grow">
-                <div className="text-center">
-                  <span className="px-2 py-0.5 rounded bg-green-950/20 border border-green-500/20 text-[9px] font-mono text-green-400 uppercase">
-                    Ready to persist
-                  </span>
-                  <h3 className="font-serif text-lg text-white mt-2 mb-1">Your Completed Creation</h3>
-                  <p className="text-zinc-500 text-[10px]">Length: {Math.round(mixedAudio.duration)} seconds • Stereo WAV</p>
-                </div>
-
-                <div className="p-4 rounded-lg bg-void/40 border border-white/5">
-                  <WaveformVisualizer audioUrl={mixedAudio.blobUrl} />
-                </div>
+        {/* Right Column: Sticky Teleprompter */}
+        <div className="w-full lg:w-96 relative hidden lg:block">
+          <div className="sticky top-32">
+            <GlassCard className="flex flex-col gap-6 p-6 h-[80vh] max-h-[800px] bg-white/[0.02] border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+              <div className="flex justify-between items-center pb-4 border-b border-white/5">
+                <span className="text-[10px] tracking-[0.2em] font-mono text-zinc-500 uppercase">
+                  Vocal Teleprompter
+                </span>
+                <span className="px-2 py-1 rounded bg-white/[0.05] border border-white/10 text-[9px] font-mono text-white uppercase tracking-wider">
+                  SYNC MODE
+                </span>
               </div>
-            ) : (
-              /* Otherwise, show Teleprompter lyrics scroll */
-              <div className="flex flex-col gap-3 flex-grow justify-start">
+
+              <div className="flex flex-col gap-4 flex-grow overflow-hidden">
                 {lyricsData ? (
                   <>
-                    <div>
-                      <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-wider block mb-1">
+                    <div className="px-2">
+                      <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">
                         Song Theme & Lyrics
                       </span>
-                      <h3 className="font-serif text-lg text-white italic">
+                      <h3 className="font-serif text-xl text-white italic">
                         &ldquo;{lyricsData.title}&rdquo;
                       </h3>
                     </div>
 
-                    <div className="space-y-3 max-h-[350px] overflow-y-auto pr-1 mt-2 flex-grow">
+                    <div className="space-y-4 overflow-y-auto pr-2 mt-4 flex-grow scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                       {lyricsData.sections.map((section, index) => {
                         const isHighlighted = index === currentSectionIndex;
                         return (
                           <div
                             key={index}
-                            className={`p-3 rounded-lg border transition-all duration-300 ${
+                            className={`p-4 rounded-xl border transition-all duration-500 ${
                               isHighlighted
-                                ? 'border-theme-400 bg-theme-500/10 text-white shadow-[0_0_10px_rgba(214,156,23,0.1)] scale-[1.01]'
-                                : 'border-white/5 bg-void/25 opacity-30 scale-95'
+                                ? 'border-white/30 bg-white/[0.05] text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] scale-[1.02]'
+                                : 'border-white/5 bg-transparent opacity-40 scale-100'
                             }`}
                           >
-                            <span className="text-[8px] font-mono text-theme-400 block mb-1 uppercase tracking-wider">
+                            <span className={`text-[9px] font-mono block mb-2 uppercase tracking-widest ${isHighlighted ? 'text-white' : 'text-zinc-500'}`}>
                               {section.label}
                             </span>
-                            <p className="text-xs italic leading-relaxed text-zinc-300">
+                            <p className="text-sm italic leading-relaxed">
                               {section.lines.join(' / ')}
                             </p>
                           </div>
@@ -685,17 +675,18 @@ function VoiceStudioContent() {
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-white/10 rounded-xl bg-void/25 flex-grow">
-                    <span className="text-zinc-600 text-2xl mb-2">🎤</span>
-                    <span className="text-zinc-500 font-mono text-[9px] uppercase tracking-widest max-w-[200px] leading-relaxed">
-                      Select a Backing Track with Lyrics to Load Teleprompter
+                  <div className="flex flex-col items-center justify-center h-full text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+                    <span className="text-zinc-600 text-3xl mb-4">🎤</span>
+                    <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest max-w-[200px] leading-relaxed">
+                      Select a Backing Track to Load Teleprompter
                     </span>
                   </div>
                 )}
               </div>
-            )}
-          </GlassCard>
+            </GlassCard>
+          </div>
         </div>
+
       </div>
 
       {toastMessage && (
@@ -712,8 +703,8 @@ function VoiceStudioContent() {
 export default function VoiceStudio() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-obsidian">
-        <div className="w-8 h-8 border-2 border-theme-400/20 border-t-theme-400 rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
       </div>
     }>
       <VoiceStudioContent />

@@ -12,6 +12,7 @@ export default function AnimatedInput({
   placeholder,
   required = false,
   error,
+  className = '',
   ...props
 }) {
   const [isFocused, setIsFocused] = useState(false);
@@ -34,7 +35,7 @@ export default function AnimatedInput({
               : isFocused
               ? 'border-theme-500/50 focus:border-theme-400 ring-2 ring-theme-500/20 bg-white/10'
               : 'border-white/10 hover:border-white/20 hover:bg-white/[0.07]'
-          } ${type === 'password' ? 'pr-12' : ''}`}
+          } ${type === 'password' ? 'pr-12' : ''} ${className}`}
           {...props}
         />
         <label

@@ -37,9 +37,9 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${outfit.variable} ${inter.variable} ${jetbrains.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-obsidian text-white font-sans">
+      <body className="min-h-screen flex flex-col bg-obsidian text-white font-sans">
         <Providers session={session}>
           <SmoothScroll>
             <ThemeManager />
