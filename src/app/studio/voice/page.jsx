@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useLenis } from 'lenis/react';
 import { VOICE_EFFECTS_PRESETS } from '@/lib/constants';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
@@ -56,6 +57,19 @@ function VoiceStudioContent() {
 
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
+  const lenis = useLenis();
+
+  const scrollToStep = (stepNum) => {
+    if (lenis) {
+      lenis.resize();
+      lenis.scrollTo(`#step-${stepNum}`, { duration: 1.2 });
+    } else {
+      const el = document.getElementById(`step-${stepNum}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const [instrumentalList, setInstrumentalList] = useState([]);
   const [selectedInstId, setSelectedInstId] = useState(preselectedInstrumentalId || '');
@@ -559,10 +573,10 @@ function VoiceStudioContent() {
                 </div>
               )}
               {vocalBuffer && (
-                <div className="flex justify-center mt-4">
-                  <span className="text-zinc-500 text-xs font-mono uppercase tracking-widest animate-pulse">
-                    ↓ Scroll down to apply effects
-                  </span>
+                <div className="flex flex-col items-center mt-8">
+                  <button onClick={() => scrollToStep(2)} className="px-6 md:px-8 py-3 rounded-full border border-white/10 bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 flex items-center gap-2 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap">
+                    Continue Flow <span className="animate-bounce">↓</span>
+                  </button>
                 </div>
               )}
             </GlassCard>
@@ -596,6 +610,15 @@ function VoiceStudioContent() {
                   isAutoVocal={isAutoVocal}
                   onEffectsChange={setEffectsOptions}
                 />
+              </div>
+
+              <div className="flex justify-between items-center mt-8">
+                <button onClick={() => scrollToStep(1)} className="text-zinc-400 hover:text-white font-mono text-[10px] md:text-xs tracking-widest uppercase transition-colors flex items-center gap-2">
+                  <span>↑</span> Back
+                </button>
+                <button onClick={() => scrollToStep(3)} className="px-6 md:px-8 py-3 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap">
+                  Next Stage <span className="animate-bounce">↓</span>
+                </button>
               </div>
             </GlassCard>
           </motion.div>
@@ -684,6 +707,12 @@ function VoiceStudioContent() {
                   </div>
                 </motion.div>
               )}
+
+              <div className="flex justify-between items-center mt-8 pt-6 border-t border-white/5">
+                <button onClick={() => scrollToStep(2)} className="text-zinc-400 hover:text-white font-mono text-[10px] md:text-xs tracking-widest uppercase transition-colors flex items-center gap-2">
+                  <span>↑</span> Back
+                </button>
+              </div>
             </GlassCard>
           </motion.div>
 

@@ -13,6 +13,7 @@ import { generateProceduralBeat } from '@/lib/audio/beatGenerator';
 import { audioBufferToMp3, fetchAndDecode } from '@/lib/audio/audioUtils';
 import { saveAs } from 'file-saver';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useLenis } from 'lenis/react';
 
 const BackgroundOrbs = () => (
   <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -54,6 +55,19 @@ function InstrumentalStudioContent() {
   
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
+  const lenis = useLenis();
+
+  const scrollToStep = (stepNum) => {
+    if (lenis) {
+      lenis.resize();
+      lenis.scrollTo(`#step-${stepNum}`, { duration: 1.2 });
+    } else {
+      const el = document.getElementById(`step-${stepNum}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const preselectedLyricId = searchParams.get('lyricId');
   const preselectedInstruments = searchParams.get('instruments');
@@ -298,6 +312,12 @@ function InstrumentalStudioContent() {
                   </select>
                 </div>
               </div>
+
+              <div className="flex flex-col items-center mt-8">
+                <button onClick={() => scrollToStep(2)} disabled={!selectedLyricId} className="px-6 md:px-8 py-3 rounded-full border border-white/10 bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap">
+                  Continue Flow <span className="animate-bounce">↓</span>
+                </button>
+              </div>
             </GlassCard>
           </motion.div>
         </div>
@@ -336,6 +356,15 @@ function InstrumentalStudioContent() {
                   );
                 })}
                 </div>
+              </div>
+
+              <div className="flex justify-between items-center mt-8">
+                <button onClick={() => scrollToStep(1)} className="text-zinc-400 hover:text-white font-mono text-[10px] md:text-xs tracking-widest uppercase transition-colors flex items-center gap-2">
+                  <span>↑</span> Back
+                </button>
+                <button onClick={() => scrollToStep(3)} disabled={selectedInstruments.length === 0} className="px-6 md:px-8 py-3 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap">
+                  Next Stage <span className="animate-bounce">↓</span>
+                </button>
               </div>
             </GlassCard>
           </motion.div>
@@ -414,6 +443,15 @@ function InstrumentalStudioContent() {
                 })}
               </div>
             )}
+
+            <div className="flex justify-between items-center mt-8 pt-6 border-t border-white/5">
+              <button onClick={() => scrollToStep(2)} className="text-zinc-400 hover:text-white font-mono text-[10px] md:text-xs tracking-widest uppercase transition-colors flex items-center gap-2">
+                <span>↑</span> Back
+              </button>
+              <button onClick={() => scrollToStep(4)} disabled={selectedInstruments.length === 0} className="px-6 md:px-8 py-3 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap">
+                Next Stage <span className="animate-bounce">↓</span>
+              </button>
+            </div>
           </GlassCard>
           </motion.div>
         </div>
@@ -437,11 +475,17 @@ function InstrumentalStudioContent() {
                 )}
               </div>
 
+              <div className="flex justify-between items-center mb-6">
+                <button onClick={() => scrollToStep(3)} className="text-zinc-400 hover:text-white font-mono text-[10px] md:text-xs tracking-widest uppercase transition-colors flex items-center gap-2">
+                  <span>↑</span> Back
+                </button>
+              </div>
+
               {/* Generate Button */}
               <button
                 onClick={handleCompose}
                 disabled={isGenerating || selectedInstruments.length === 0}
-                className={`mb-6 w-full px-8 py-5 rounded-full font-bold font-mono text-sm tracking-widest uppercase transition-all flex items-center justify-center gap-3 ${
+                className={`mb-6 w-full px-6 md:px-8 py-4 md:py-5 rounded-full font-bold font-mono text-[10px] md:text-sm tracking-wider md:tracking-widest uppercase transition-all flex items-center justify-center gap-2 md:gap-3 whitespace-nowrap ${
                   isGenerating || selectedInstruments.length === 0
                     ? 'bg-zinc-900 text-zinc-600 border border-white/5 cursor-not-allowed'
                     : 'bg-white hover:bg-zinc-200 text-black hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)]'

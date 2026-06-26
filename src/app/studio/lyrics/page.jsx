@@ -274,7 +274,7 @@ export default function LyricStudio() {
               </div>
 
               <div className="flex flex-col items-center">
-                <button onClick={() => scrollToStep(2)} className="px-8 py-3 rounded-full border border-white/10 bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 flex items-center gap-2 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                <button onClick={() => scrollToStep(2)} className="px-6 md:px-8 py-3 rounded-full border border-white/10 bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 flex items-center gap-2 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap">
                   Continue Flow <span className="animate-bounce">↓</span>
                 </button>
               </div>
@@ -321,7 +321,7 @@ export default function LyricStudio() {
                 <button 
                   onClick={() => scrollToStep(3)} 
                   disabled={!seedPhrase.trim()}
-                  className="px-8 py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                  className="px-6 md:px-8 py-3 md:py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap"
                 >
                   Next Stage <span>↓</span>
                 </button>
@@ -377,7 +377,7 @@ export default function LyricStudio() {
                 <button 
                   onClick={() => scrollToStep(4)} 
                   disabled={!selectedGenre}
-                  className="px-8 py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                  className="px-6 md:px-8 py-3 md:py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-[10px] md:text-xs tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] whitespace-nowrap"
                 >
                   Next Stage <span>↓</span>
                 </button>
@@ -473,7 +473,7 @@ export default function LyricStudio() {
                 <button 
                   onClick={handleGenerate} 
                   disabled={!seedPhrase.trim() || !selectedGenre}
-                  className="px-10 py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-bold font-mono text-sm tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-3 shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                  className="px-6 md:px-10 py-3 md:py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-bold font-mono text-[10px] md:text-sm tracking-wider md:tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 md:gap-3 shadow-[0_0_30px_rgba(255,255,255,0.3)] whitespace-nowrap"
                 >
                   Generate Masterpiece <span>✨</span>
                 </button>
