@@ -7,7 +7,7 @@ import AICore from './AICore';
 
 export default function Scene({ scrollYProgress }) {
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
+    <div className="absolute inset-0 w-full h-full pointer-events-none">
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }} dpr={[1, 2]}>
         <color attach="background" args={['#050508']} />
         

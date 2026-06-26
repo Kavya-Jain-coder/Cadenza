@@ -32,8 +32,8 @@ const variants = {
 };
 
 export default function PageTransition({ children, variant = 'slide-left', className = "" }) {
-  const pathname = usePathname();
   const currentVariant = variants[variant] || variants['slide-left'];
+  const pathname = usePathname();
 
   return (
     <motion.div

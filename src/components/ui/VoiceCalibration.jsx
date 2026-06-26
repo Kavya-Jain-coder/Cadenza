@@ -119,46 +119,51 @@ export default function VoiceCalibration() {
   };
 
   return (
-    <div className="relative group rounded-3xl p-[1px] overflow-hidden bg-white/10 hover:bg-white/20 transition-colors duration-700">
+    <div className="relative group rounded-[3rem] p-[1px] overflow-hidden bg-gradient-to-br from-theme-500/30 to-transparent hover:from-theme-400/50 transition-all duration-700 shadow-2xl">
       
       {/* Sweeping Highlight on the border */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
       
-      <div className="relative bg-black rounded-3xl p-8 md:p-10 shadow-2xl flex flex-col md:flex-row gap-8 items-center overflow-hidden">
+      <div className="relative glass-premium rounded-[3rem] p-12 md:p-20 shadow-inner flex flex-col items-center justify-center text-center overflow-hidden min-h-[50vh]">
         
         {/* Hardware Ambient Glow */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/[0.02] blur-3xl rounded-full pointer-events-none translate-x-1/3 -translate-y-1/2" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--dyn-theme-500),0.15)_0%,transparent_70%)] pointer-events-none" />
         
-        <div className="flex-grow space-y-5 relative z-10">
-          <h2 className="text-2xl font-serif text-white flex items-center gap-4">
-            Voice Footprint
+        <div className="max-w-2xl space-y-8 relative z-10 flex flex-col items-center">
+          
+          <div className="flex items-center gap-4">
+            <h2 className="text-4xl md:text-5xl font-serif text-white tracking-wide">
+              Voice Footprint
+            </h2>
             {hasExistingProfile && (
-              <span className="flex items-center gap-1.5 bg-white text-black text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
+              <span className="flex items-center gap-2 bg-theme-500/20 border border-theme-500 text-theme-300 text-[10px] uppercase font-bold tracking-[0.2em] px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(var(--dyn-theme-500),0.3)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-theme-400 animate-pulse" />
                 Calibrated
               </span>
             )}
-          </h2>
-          <p className="text-zinc-400 text-sm max-w-lg leading-relaxed">
+          </div>
+          
+          <p className="text-zinc-300 text-lg md:text-xl leading-relaxed">
             Record a short phrase to create your unique vocal signature. We&apos;ll use this to automatically tune and shape AI-generated vocals to match your natural timbre.
           </p>
           
           <AnimatePresence mode="wait">
             {state === 'calibrating' && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden"
+                initial={{ opacity: 0, height: 0, scale: 0.9 }}
+                animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                exit={{ opacity: 0, height: 0, scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="overflow-hidden w-full"
               >
-                <div className="bg-white/[0.03] border border-white/10 rounded-xl p-5 mt-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-                    <p className="text-[10px] font-mono tracking-widest text-zinc-300 uppercase">
+                <div className="bg-white/[0.05] border border-white/20 rounded-3xl p-8 mt-4 backdrop-blur-xl shadow-2xl">
+                  <div className="flex items-center justify-center gap-4 mb-6">
+                    <div className="w-3 h-3 rounded-full bg-red-500 animate-ping shadow-[0_0_15px_rgba(239,68,68,0.8)]" />
+                    <p className="text-xs font-mono tracking-[0.3em] text-red-400 uppercase font-bold">
                       Recording. Read aloud clearly:
                     </p>
                   </div>
-                  <p className="text-lg text-white font-serif italic opacity-90">
+                  <p className="text-2xl md:text-3xl text-white font-serif italic leading-relaxed">
                     &ldquo;{CALIBRATION_PHRASE}&rdquo;
                   </p>
                 </div>
@@ -166,32 +171,39 @@ export default function VoiceCalibration() {
             )}
           </AnimatePresence>
 
-          {error && <p className="text-red-400 text-[10px] font-mono tracking-widest uppercase">{error}</p>}
-        </div>
-
-        <div className="flex-shrink-0 relative z-10 flex flex-col items-center gap-3">
-          {state === 'idle' || state === 'completed' || state === 'error' ? (
-            <button
-              onClick={startCalibration}
-              className="px-8 py-4 rounded-full bg-white text-black font-mono text-[11px] font-bold tracking-[0.2em] uppercase hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+          {error && (
+            <motion.p 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className="text-red-400 text-xs font-mono tracking-widest uppercase bg-red-500/10 px-4 py-2 rounded-lg border border-red-500/20"
             >
-              {hasExistingProfile ? 'Re-calibrate' : 'Start Calibration'}
-            </button>
-          ) : state === 'calibrating' ? (
-            <button
-              onClick={stopCalibration}
-              className="px-8 py-4 rounded-full bg-red-600 text-white font-mono text-[11px] font-bold tracking-[0.2em] uppercase hover:scale-105 transition-transform animate-pulse shadow-[0_0_30px_rgba(220,38,38,0.5)]"
-            >
-              Stop & Save
-            </button>
-          ) : (
-            <div className="px-8 py-4 font-mono text-[11px] tracking-[0.2em] uppercase text-zinc-500 flex items-center gap-3">
-              <div className="w-4 h-4 border-2 border-zinc-500/30 border-t-zinc-500 rounded-full animate-spin" />
-              Processing
-            </div>
+              {error}
+            </motion.p>
           )}
-        </div>
 
+          <div className="pt-8">
+            {state === 'idle' || state === 'completed' || state === 'error' ? (
+              <button
+                onClick={startCalibration}
+                className="px-12 py-5 rounded-full bg-gradient-to-r from-theme-600 to-theme-400 text-white font-mono text-sm font-bold tracking-[0.2em] uppercase hover:scale-105 transition-all shadow-[0_0_40px_rgba(var(--dyn-theme-500),0.5)] hover:shadow-[0_0_60px_rgba(var(--dyn-theme-500),0.7)]"
+              >
+                {hasExistingProfile ? 'Re-calibrate Voice' : 'Start Calibration'}
+              </button>
+            ) : state === 'calibrating' ? (
+              <button
+                onClick={stopCalibration}
+                className="px-12 py-5 rounded-full bg-red-600 text-white font-mono text-sm font-bold tracking-[0.2em] uppercase hover:scale-105 transition-all animate-pulse shadow-[0_0_40px_rgba(220,38,38,0.6)]"
+              >
+                Stop & Save
+              </button>
+            ) : (
+              <div className="px-12 py-5 font-mono text-sm tracking-[0.2em] uppercase text-zinc-400 flex items-center justify-center gap-4 bg-white/5 rounded-full border border-white/10">
+                <div className="w-5 h-5 border-2 border-zinc-400/30 border-t-zinc-400 rounded-full animate-spin" />
+                Processing Profile...
+              </div>
+            )}
+          </div>
+          
+        </div>
       </div>
     </div>
   );

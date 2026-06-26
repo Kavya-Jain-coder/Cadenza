@@ -4,7 +4,6 @@ import Navbar from "@/components/layout/Navbar";
 import Providers from "@/components/layout/Providers";
 import ThemeManager from "@/components/layout/ThemeManager";
 import SmoothScroll from "@/components/layout/SmoothScroll";
-import PageTransitionWrapper from "@/components/layout/PageTransitionWrapper";
 import GlobalBackground from "@/components/ui/GlobalBackground";
 
 const outfit = Outfit({
@@ -46,9 +45,7 @@ export default async function RootLayout({ children }) {
             <ThemeManager />
             <GlobalBackground />
             <Navbar />
-            <PageTransitionWrapper>
-              {children}
-            </PageTransitionWrapper>
+            {children}
           </SmoothScroll>
         </Providers>
       </body>

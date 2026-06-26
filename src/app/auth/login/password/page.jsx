@@ -68,7 +68,7 @@ export default function LoginPassword() {
   return (
     <div className="flex flex-col h-full w-full relative">
             
-      <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
+      <div className="flex-1 flex flex-col md:flex-row justify-between items-start w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <motion.div 
           className="max-w-xl md:mb-12"

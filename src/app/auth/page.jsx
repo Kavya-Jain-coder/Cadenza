@@ -9,14 +9,16 @@ export default function WelcomeGate() {
   return (
     <PageTransition variant="scale-pop" className="flex flex-col h-full w-full relative">
             
-      <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
+      <div className="flex-1 flex flex-col md:flex-row justify-between items-start w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <motion.div 
-          className="max-w-xl md:mb-12"
+          className="max-w-xl md:mb-12 relative"
           initial={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
           animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
           transition={{ ease: [0.22, 1, 0.36, 1], duration: 1, delay: 0.2 }}
         >
+          {/* Dark underlay to ensure text pops against the bright wave */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.8)_0%,transparent_80%)] -z-10 scale-[1.5] blur-xl pointer-events-none" />
           <span className="text-[10px] tracking-[0.3em] font-mono text-theme-400 uppercase mb-3 block drop-shadow-md">
             Welcome to Cadenza
           </span>

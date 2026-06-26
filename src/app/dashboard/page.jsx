@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import EmptyState from '@/components/dashboard/EmptyState';
@@ -8,7 +8,8 @@ import CreationCard from '@/components/dashboard/CreationCard';
 import VoiceCalibration from '@/components/ui/VoiceCalibration';
 import Toast from '@/components/ui/Toast';
 import DashboardScene from '@/components/3d/DashboardScene';
-import { motion, AnimatePresence } from 'framer-motion';
+import FeatureShowcase from '@/components/dashboard/FeatureShowcase';
+import { motion, AnimatePresence, useScroll } from 'framer-motion';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -18,6 +19,22 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+  
+  // Stage 2: Feature Showcase (Scrollytelling track)
+  const showcaseRef = useRef(null);
+  const { scrollYProgress: showcaseScroll } = useScroll({
+    target: showcaseRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Stage 3: Catalog Transition
+  // We track when the showcase FINISHES to drop the 3D model down.
+  // "end end" = when bottom of showcase hits bottom of screen (catalog starts appearing)
+  // "end start" = when bottom of showcase hits top of screen (catalog fully covers screen)
+  const { scrollYProgress: catalogScroll } = useScroll({
+    target: showcaseRef,
+    offset: ["end end", "end start"]
+  });
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -98,44 +115,94 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen p-4 md:p-8 relative pt-40 md:pt-48 pb-24 flex-grow flex flex-col justify-start overflow-hidden">
+    <div className="relative w-full">
       
-      <DashboardScene />
+      {/* 3D Background - reacts to both showcase and catalog scroll */}
+      <DashboardScene showcaseScroll={showcaseScroll} catalogScroll={catalogScroll} />
       
       {/* Massive Ambient Radial Gradient for Depth */}
       <div className="fixed top-[-20%] right-[-10%] w-[80vw] h-[80vw] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.03)_0%,transparent_60%)] blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto w-full relative z-10 flex-grow flex flex-col">
-        {/* Header Title */}
-        <div className="mb-12 select-none">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-[10px] tracking-[0.3em] font-mono text-zinc-500 uppercase mb-3 block"
+      {/* MAIN CONTENT LAYER */}
+      <div className="relative z-10 w-full">
+        
+        {/* =========================================
+            STAGE 1: THE VOCAL STUDIO
+           ========================================= */}
+        <div 
+          className="min-h-screen flex flex-col items-center p-4 md:p-8 max-w-7xl mx-auto w-full pb-20"
+          style={{ paddingTop: '20vh' }}
+        >
+          
+          {/* Header Title */}
+          <div className="mb-12 text-center select-none">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-[10px] tracking-[0.3em] font-mono text-theme-400 uppercase mb-3 block"
+            >
+              Step 1
+            </motion.span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="font-serif text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-white via-theme-200 to-theme-500 tracking-wide pb-2 drop-shadow-[0_0_15px_rgba(var(--dyn-theme-500),0.3)]"
+            >
+              Calibrate Your Voice
+            </motion.h1>
+          </div>
+
+          {/* Massive Voice Calibration Widget */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="w-full max-w-5xl"
           >
-            Creations Hub
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="font-serif text-5xl md:text-6xl text-white tracking-wide"
+            <VoiceCalibration />
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-20 flex flex-col items-center opacity-50"
           >
-            Your Sonic Catalog
-          </motion.h1>
+            <span className="text-[9px] font-mono tracking-widest uppercase text-zinc-400 mb-2">Scroll to explore</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-theme-500 to-transparent" />
+          </motion.div>
         </div>
 
-        {/* Voice Calibration Widget */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mb-16"
-        >
-          <VoiceCalibration />
-        </motion.div>
+        {/* =========================================
+            STAGE 2: FEATURE SHOWCASE (Scrollytelling)
+           ========================================= */}
+        <FeatureShowcase showcaseRef={showcaseRef} scrollYProgress={showcaseScroll} />
 
-        {isLoading ? (
+        {/* =========================================
+            STAGE 3: THE CATALOG
+           ========================================= */}
+        <div className="min-h-screen p-4 md:p-8 max-w-7xl mx-auto w-full flex flex-col pt-32 pb-24">
+          <div className="mb-12 select-none">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-[10px] tracking-[0.3em] font-mono text-theme-400 uppercase mb-3 block"
+            >
+              Your Sonic Catalog
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="font-serif text-4xl md:text-5xl text-white tracking-wide pb-2"
+            >
+              Recent Creations
+            </motion.h2>
+          </div>
+
+          {isLoading ? (
           <div className="flex-grow flex items-center justify-center py-20">
             <div className="w-12 h-12 border-2 border-white/10 border-t-white rounded-full animate-spin" />
           </div>
@@ -154,14 +221,14 @@ export default function Dashboard() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`relative px-5 py-2.5 rounded-full text-[11px] font-mono tracking-widest uppercase transition-all duration-300 whitespace-nowrap z-10 ${
-                      isActive ? 'text-black font-bold' : 'text-zinc-500 hover:text-zinc-300 border border-white/5 bg-white/5'
+                    className={`relative px-6 py-3 rounded-full text-[11px] font-mono tracking-widest uppercase transition-all duration-300 whitespace-nowrap z-10 glass hover:theme-glow-hover ${
+                      isActive ? 'text-white font-bold border-theme-400/50 shadow-[0_0_20px_rgba(var(--dyn-theme-500),0.3)]' : 'text-zinc-400 border-white/5'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activePillTab"
-                        className="absolute inset-0 bg-white rounded-full -z-10 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                        className="absolute inset-0 bg-theme-500/20 rounded-full -z-10"
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
@@ -205,6 +272,8 @@ export default function Dashboard() {
             )}
           </div>
         )}
+      </div>
+      {/* END MAIN CONTENT LAYER */}
       </div>
 
       {toastMessage && (

@@ -17,7 +17,7 @@ const textRevealVariant = {
 };
 
 const TextReveal = ({ children }) => (
-  <div className="overflow-hidden">
+  <div className="overflow-hidden pb-4 pr-8 -mr-8">
     <motion.div variants={textRevealVariant}>{children}</motion.div>
   </div>
 );
@@ -29,23 +29,27 @@ export default function Home() {
     offset: ["start start", "end end"]
   });
 
-  const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.2], [1, 1, 0]);
-  const opacity2 = useTransform(scrollYProgress, [0.2, 0.3, 0.45, 0.55], [0, 1, 1, 0]);
-  const opacity3 = useTransform(scrollYProgress, [0.55, 0.65, 0.75, 0.85], [0, 1, 1, 0]);
-  const opacity4 = useTransform(scrollYProgress, [0.85, 0.9, 1], [0, 1, 1]);
+  const opacity1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
+  const opacity2 = useTransform(scrollYProgress, [0.15, 0.25, 0.35, 0.45], [0, 1, 1, 0]);
+  const opacity3 = useTransform(scrollYProgress, [0.4, 0.5, 0.6, 0.7], [0, 1, 1, 0]);
+  const opacity4 = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.95], [0, 1, 1, 0]);
+  const opacity5 = useTransform(scrollYProgress, [0.9, 0.95, 1], [0, 1, 1]);
 
-  const y1 = useTransform(scrollYProgress, [0, 0.2], ["0vh", "-150vh"]);
-  const y2 = useTransform(scrollYProgress, [0.2, 0.3, 0.45, 0.55], ["50vh", "0vh", "0vh", "-50vh"]);
-  const y3 = useTransform(scrollYProgress, [0.55, 0.65, 0.75, 0.85], ["50vh", "0vh", "0vh", "-50vh"]);
-  const y4 = useTransform(scrollYProgress, [0.85, 0.9, 1], ["50vh", "0vh", "0vh"]);
+  const y1 = useTransform(scrollYProgress, [0, 0.15], ["0vh", "-150vh"]);
+  const y2 = useTransform(scrollYProgress, [0.15, 0.25, 0.35, 0.45], ["50vh", "0vh", "0vh", "-50vh"]);
+  const y3 = useTransform(scrollYProgress, [0.4, 0.5, 0.6, 0.7], ["50vh", "0vh", "0vh", "-50vh"]);
+  const y4 = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.95], ["50vh", "0vh", "0vh", "-50vh"]);
+  const y5 = useTransform(scrollYProgress, [0.9, 0.95, 1], ["50vh", "0vh", "0vh"]);
   
-  const display1 = useTransform(scrollYProgress, [0, 0.2, 0.21], ["flex", "flex", "none"]);
+  const display1 = useTransform(scrollYProgress, [0, 0.15, 0.16], ["flex", "flex", "none"]);
 
   return (
-    <div className="relative text-white min-h-screen">
-      <Scene scrollYProgress={scrollYProgress} />
+    <div className="relative text-white min-h-screen isolate">
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        <Scene scrollYProgress={scrollYProgress} />
+      </div>
       
-      <div ref={container} className="relative h-[400vh]">
+      <div ref={container} className="relative z-50 h-[500vh] pointer-events-auto">
         <div className="sticky top-0 h-screen flex flex-col justify-center items-center overflow-hidden pointer-events-none">
           
           {/* Section 1: Intro */}
@@ -65,59 +69,95 @@ export default function Home() {
             
             <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-serif tracking-tight leading-[0.9] mb-6 drop-shadow-2xl">
               <TextReveal>SONIC</TextReveal>
-              <TextReveal><span className="text-zinc-500 italic">PERFECTION</span></TextReveal>
+              <TextReveal><span className="text-zinc-500 italic pr-4">PERFECTION</span></TextReveal>
             </h1>
+
+            {/* Scroll Indicator */}
+            <motion.div 
+              variants={textRevealVariant} 
+              className="absolute bottom-12 flex flex-col items-center gap-4"
+            >
+              <span className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">Scroll to explore</span>
+              <motion.div 
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-[1px] h-16 bg-gradient-to-b from-zinc-500 to-transparent"
+              />
+            </motion.div>
           </motion.div>
 
-          {/* Section 2: Instrumental */}
+          {/* Section 2: Lyrics */}
           <motion.div 
             style={{ opacity: opacity2, y: y2 }}
             className="absolute inset-0 flex flex-col items-start justify-center p-8 md:pl-[10%]"
           >
-            <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mb-6">
+            <div className="w-12 h-12 rounded-full border border-white/20 text-white flex items-center justify-center mb-6">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tight leading-none mb-6">
+              AI Powered<br />
+              <span className="text-zinc-500 italic">Songwriting</span>
+            </h2>
+            <p className="text-xl text-zinc-400 max-w-lg font-light mb-8 pointer-events-auto">
+              Beat writer's block instantly. Generate meaningful, structured lyrics tailored to your genre and mood.
+            </p>
+            <div className="pointer-events-auto">
+               <Link href="/studio/lyrics" className="group flex items-center gap-2 text-white border-b border-white/30 hover:border-white transition-colors pb-1 text-lg">
+                 Try Lyrics Studio
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+               </Link>
+            </div>
+          </motion.div>
+
+          {/* Section 3: Instrumental */}
+          <motion.div 
+            style={{ opacity: opacity3, y: y3 }}
+            className="absolute inset-0 flex flex-col items-end justify-center text-right p-8 md:pr-[10%]"
+          >
+            <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mb-6 ml-auto">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
             </div>
             <h2 className="text-5xl md:text-7xl font-serif tracking-tight leading-none mb-6">
               High Fidelity<br />
               <span className="text-zinc-500 italic">Instrumentals</span>
             </h2>
-            <p className="text-xl text-zinc-400 max-w-lg font-light mb-8 pointer-events-auto">
+            <p className="text-xl text-zinc-400 max-w-lg font-light ml-auto mb-8 pointer-events-auto">
               Generate studio-quality beats in seconds. Full control over tempo, genre, and instrumentation.
             </p>
             <div className="pointer-events-auto">
-               <Link href="/studio/instrumental" className="group flex items-center gap-2 text-white border-b border-white/30 hover:border-white transition-colors pb-1 text-lg">
+               <Link href="/studio/instrumental" className="group flex items-center gap-2 justify-end text-white border-b border-white/30 hover:border-white transition-colors pb-1 text-lg">
                  Try Instrumental Studio
                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                </Link>
             </div>
           </motion.div>
 
-          {/* Section 3: Vocals */}
+          {/* Section 4: Vocals */}
           <motion.div 
-            style={{ opacity: opacity3, y: y3 }}
-            className="absolute inset-0 flex flex-col items-end justify-center text-right p-8 md:pr-[10%]"
+            style={{ opacity: opacity4, y: y4 }}
+            className="absolute inset-0 flex flex-col items-start justify-center p-8 md:pl-[10%]"
           >
-            <div className="w-12 h-12 rounded-full border border-white/20 text-white flex items-center justify-center mb-6 ml-auto">
+            <div className="w-12 h-12 rounded-full border border-white/20 text-white flex items-center justify-center mb-6">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
             </div>
             <h2 className="text-5xl md:text-7xl font-serif tracking-tight leading-none mb-6">
               Vocal Synthesis<br />
               <span className="text-zinc-500 italic">On Scroll</span>
             </h2>
-            <p className="text-xl text-zinc-400 max-w-lg font-light ml-auto mb-8 pointer-events-auto">
+            <p className="text-xl text-zinc-400 max-w-lg font-light mb-8 pointer-events-auto">
               Type your lyrics. Pick a voice profile. Watch as Cadenza breathes life into your words.
             </p>
             <div className="pointer-events-auto">
-               <Link href="/studio/voice" className="group flex items-center gap-2 justify-end text-white border-b border-white/30 hover:border-white transition-colors pb-1 text-lg">
+               <Link href="/studio/voice" className="group flex items-center gap-2 text-white border-b border-white/30 hover:border-white transition-colors pb-1 text-lg">
                  Try Voice Studio
                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                </Link>
             </div>
           </motion.div>
 
-          {/* Section 4: CTA */}
+          {/* Section 5: CTA */}
           <motion.div 
-            style={{ opacity: opacity4, y: y4 }}
+            style={{ opacity: opacity5, y: y5 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-8"
           >
             <h2 className="text-6xl md:text-8xl font-serif tracking-tight mb-12">

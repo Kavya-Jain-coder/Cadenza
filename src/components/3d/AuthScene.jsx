@@ -7,7 +7,7 @@ import AudioWave from './AudioWave';
 
 export default function AuthScene() {
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
+    <div className="absolute inset-0 w-full h-full pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
         <Suspense fallback={null}>
           <Environment preset="studio" environmentIntensity={0.2} />

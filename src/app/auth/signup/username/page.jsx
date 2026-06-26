@@ -69,7 +69,7 @@ export default function UsernameStep() {
   return (
     <PageTransition variant="slide-right" className="flex flex-col h-full w-full relative">
             
-      <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end w-full relative z-10 gap-8 h-full">
+      <div className="flex-1 flex flex-col md:flex-row justify-between items-start w-full relative z-10 gap-8 h-full">
         {/* Top/Left Title Region */}
         <div className="max-w-xl md:mb-12">
           <StepIndicator currentStep={1} totalSteps={4} label="Create Account" />

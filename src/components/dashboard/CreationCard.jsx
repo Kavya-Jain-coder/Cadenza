@@ -58,7 +58,7 @@ export default function CreationCard({ creation, type, onDelete }) {
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative rounded-[2rem] p-[1px] bg-gradient-to-br from-white/20 via-transparent to-white/5 group h-full flex flex-col"
+      className="relative rounded-[2rem] p-[1px] bg-gradient-to-br from-theme-400/30 via-transparent to-theme-600/10 group h-full flex flex-col hover:theme-glow-hover transition-shadow duration-300"
     >
       <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none">
         <motion.div 
@@ -71,7 +71,7 @@ export default function CreationCard({ creation, type, onDelete }) {
         />
       </div>
 
-      <div className="relative bg-[#050505] rounded-[2rem] p-6 h-full flex flex-col justify-between overflow-hidden shadow-2xl">
+      <div className="relative glass-premium rounded-[2rem] p-6 h-full flex flex-col justify-between overflow-hidden shadow-2xl">
         
         {/* Subtle abstract grain/texture */}
         <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -82,7 +82,7 @@ export default function CreationCard({ creation, type, onDelete }) {
             <span className={`px-3 py-1 rounded-full text-[9px] font-mono tracking-widest uppercase ${badgeStyles[type]}`}>
               {type === 'lyric' ? 'Lyrics' : type === 'instrumental' ? 'Beat' : 'Full Mix'}
             </span>
-            <span className="text-[10px] font-mono text-zinc-500 tracking-wider">
+            <span className="text-[10px] font-mono text-theme-300 tracking-wider">
               {formatDate(creation.created_at)}
             </span>
           </div>
