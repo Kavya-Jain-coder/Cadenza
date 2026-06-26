@@ -244,7 +244,7 @@ function InstrumentalStudioContent() {
             scale: useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.2, 0.9]),
             opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.4, 0.4, 0])
           }}
-          className="w-[50vw] h-[50vw] rounded-full border-[1px] border-theme-500/30 mix-blend-screen"
+          className="w-[90vw] h-[90vw] md:w-[50vw] md:h-[50vw] rounded-full border-[1px] border-theme-500/30 mix-blend-screen"
         />
         <motion.div 
           style={{ 
@@ -252,7 +252,7 @@ function InstrumentalStudioContent() {
             scale: useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.7, 1.1]),
             opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.2, 0.2, 0])
           }}
-          className="absolute w-[35vw] h-[35vw] rounded-full border-[1px] border-white/20 mix-blend-screen"
+          className="absolute w-[70vw] h-[70vw] md:w-[35vw] md:h-[35vw] rounded-full border-[1px] border-white/20 mix-blend-screen"
         />
       </div>
 
@@ -444,7 +444,7 @@ function InstrumentalStudioContent() {
                 className={`mb-6 w-full px-8 py-5 rounded-full font-bold font-mono text-sm tracking-widest uppercase transition-all flex items-center justify-center gap-3 ${
                   isGenerating || selectedInstruments.length === 0
                     ? 'bg-zinc-900 text-zinc-600 border border-white/5 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-theme-500 to-theme-400 hover:from-theme-400 hover:to-theme-300 text-black hover:scale-105 shadow-[0_0_30px_rgba(214,156,23,0.4)]'
+                    : 'bg-white hover:bg-zinc-200 text-black hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)]'
                 }`}
               >
                 {isGenerating ? (
@@ -519,7 +519,7 @@ function InstrumentalStudioContent() {
                     </button>
                     <button
                       onClick={() => router.push(`/studio/voice?instrumentalId=${result.id}`)}
-                      className="flex-1 px-6 py-4 rounded-full border border-theme-400 bg-theme-500/10 hover:bg-theme-500/20 text-theme-300 font-mono text-[10px] tracking-widest uppercase transition-all hover:scale-105 shadow-[0_0_20px_rgba(214,156,23,0.15)] flex items-center justify-center gap-2"
+                      className="flex-1 px-6 py-4 rounded-full border border-transparent bg-white hover:bg-zinc-200 text-black font-mono text-[10px] tracking-widest uppercase transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2"
                     >
                       Proceed to Voice <span className="text-sm">→</span>
                     </button>

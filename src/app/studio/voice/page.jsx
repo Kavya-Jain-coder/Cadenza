@@ -373,6 +373,64 @@ function VoiceStudioContent() {
     }
   };
 
+  const renderTeleprompter = () => (
+    <GlassCard className="flex flex-col gap-6 p-6 h-[50vh] lg:h-[80vh] max-h-[800px] bg-white/[0.02] border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+      <div className="flex justify-between items-center pb-4 border-b border-white/5">
+        <span className="text-[10px] tracking-[0.2em] font-mono text-zinc-500 uppercase">
+          Vocal Teleprompter
+        </span>
+        <span className="px-2 py-1 rounded bg-white/[0.05] border border-white/10 text-[9px] font-mono text-white uppercase tracking-wider">
+          SYNC MODE
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-4 flex-grow overflow-hidden">
+        {lyricsData ? (
+          <>
+            <div className="px-2">
+              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">
+                Song Theme & Lyrics
+              </span>
+              <h3 className="font-serif text-xl text-white italic">
+                &ldquo;{lyricsData.title}&rdquo;
+              </h3>
+            </div>
+
+            <div className="space-y-4 overflow-y-auto pr-2 mt-4 flex-grow scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+              {lyricsData.sections.map((section, index) => {
+                const isHighlighted = index === currentSectionIndex;
+                return (
+                  <div
+                    key={index}
+                    className={`p-4 rounded-xl border transition-all duration-500 ${
+                      isHighlighted
+                        ? 'border-white/30 bg-white/[0.05] text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] scale-[1.02]'
+                        : 'border-white/5 bg-transparent opacity-40 scale-100'
+                    }`}
+                  >
+                    <span className={`text-[9px] font-mono block mb-2 uppercase tracking-widest ${isHighlighted ? 'text-white' : 'text-zinc-500'}`}>
+                      {section.label}
+                    </span>
+                    <p className="text-sm italic leading-relaxed">
+                      {section.lines.join(' / ')}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+            <span className="text-zinc-600 text-3xl mb-4">🎤</span>
+            <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest max-w-[200px] leading-relaxed">
+              Select a Backing Track to Load Teleprompter
+            </span>
+          </div>
+        )}
+      </div>
+    </GlassCard>
+  );
+
   return (
     <div className="relative min-h-screen text-white bg-zinc-950 font-sans selection:bg-white/30" ref={containerRef}>
       <BackgroundOrbs />
@@ -439,6 +497,11 @@ function VoiceStudioContent() {
                     <option value="" className="bg-zinc-900">No backing tracks available</option>
                   )}
                 </select>
+              </div>
+
+              {/* Mobile Teleprompter */}
+              <div className="block lg:hidden w-full mt-2">
+                {renderTeleprompter()}
               </div>
 
               {instrumentalList.length === 0 ? (
@@ -629,61 +692,7 @@ function VoiceStudioContent() {
         {/* Right Column: Sticky Teleprompter */}
         <div className="w-full lg:w-96 relative hidden lg:block">
           <div className="sticky top-32">
-            <GlassCard className="flex flex-col gap-6 p-6 h-[80vh] max-h-[800px] bg-white/[0.02] border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
-              <div className="flex justify-between items-center pb-4 border-b border-white/5">
-                <span className="text-[10px] tracking-[0.2em] font-mono text-zinc-500 uppercase">
-                  Vocal Teleprompter
-                </span>
-                <span className="px-2 py-1 rounded bg-white/[0.05] border border-white/10 text-[9px] font-mono text-white uppercase tracking-wider">
-                  SYNC MODE
-                </span>
-              </div>
-
-              <div className="flex flex-col gap-4 flex-grow overflow-hidden">
-                {lyricsData ? (
-                  <>
-                    <div className="px-2">
-                      <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">
-                        Song Theme & Lyrics
-                      </span>
-                      <h3 className="font-serif text-xl text-white italic">
-                        &ldquo;{lyricsData.title}&rdquo;
-                      </h3>
-                    </div>
-
-                    <div className="space-y-4 overflow-y-auto pr-2 mt-4 flex-grow scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                      {lyricsData.sections.map((section, index) => {
-                        const isHighlighted = index === currentSectionIndex;
-                        return (
-                          <div
-                            key={index}
-                            className={`p-4 rounded-xl border transition-all duration-500 ${
-                              isHighlighted
-                                ? 'border-white/30 bg-white/[0.05] text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] scale-[1.02]'
-                                : 'border-white/5 bg-transparent opacity-40 scale-100'
-                            }`}
-                          >
-                            <span className={`text-[9px] font-mono block mb-2 uppercase tracking-widest ${isHighlighted ? 'text-white' : 'text-zinc-500'}`}>
-                              {section.label}
-                            </span>
-                            <p className="text-sm italic leading-relaxed">
-                              {section.lines.join(' / ')}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
-                    <span className="text-zinc-600 text-3xl mb-4">🎤</span>
-                    <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest max-w-[200px] leading-relaxed">
-                      Select a Backing Track to Load Teleprompter
-                    </span>
-                  </div>
-                )}
-              </div>
-            </GlassCard>
+            {renderTeleprompter()}
           </div>
         </div>
 

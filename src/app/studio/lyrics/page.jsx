@@ -225,7 +225,7 @@ export default function LyricStudio() {
             scale: useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.2, 0.9]),
             opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.4, 0.4, 0])
           }}
-          className="w-[50vw] h-[50vw] rounded-full border-[1px] border-theme-500/30 mix-blend-screen"
+          className="w-[90vw] h-[90vw] md:w-[50vw] md:h-[50vw] rounded-full border-[1px] border-theme-500/30 mix-blend-screen"
         />
         <motion.div 
           style={{ 
@@ -233,7 +233,7 @@ export default function LyricStudio() {
             scale: useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.7, 1.1]),
             opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.2, 0.2, 0])
           }}
-          className="absolute w-[35vw] h-[35vw] rounded-full border-[1px] border-white/20 mix-blend-screen"
+          className="absolute w-[70vw] h-[70vw] md:w-[35vw] md:h-[35vw] rounded-full border-[1px] border-white/20 mix-blend-screen"
         />
       </div>
 
@@ -274,7 +274,7 @@ export default function LyricStudio() {
               </div>
 
               <div className="flex flex-col items-center">
-                <button onClick={() => scrollToStep(2)} className="px-8 py-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-white font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 flex items-center gap-2 backdrop-blur-md">
+                <button onClick={() => scrollToStep(2)} className="px-8 py-3 rounded-full border border-white/10 bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 flex items-center gap-2 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                   Continue Flow <span className="animate-bounce">↓</span>
                 </button>
               </div>
@@ -321,7 +321,7 @@ export default function LyricStudio() {
                 <button 
                   onClick={() => scrollToStep(3)} 
                   disabled={!seedPhrase.trim()}
-                  className="px-8 py-4 rounded-full bg-theme-500 hover:bg-theme-400 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(214,156,23,0.3)]"
+                  className="px-8 py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                 >
                   Next Stage <span>↓</span>
                 </button>
@@ -377,7 +377,7 @@ export default function LyricStudio() {
                 <button 
                   onClick={() => scrollToStep(4)} 
                   disabled={!selectedGenre}
-                  className="px-8 py-4 rounded-full bg-theme-500 hover:bg-theme-400 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(214,156,23,0.3)]"
+                  className="px-8 py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-semibold font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                 >
                   Next Stage <span>↓</span>
                 </button>
@@ -473,7 +473,7 @@ export default function LyricStudio() {
                 <button 
                   onClick={handleGenerate} 
                   disabled={!seedPhrase.trim() || !selectedGenre}
-                  className="px-10 py-4 rounded-full bg-gradient-to-r from-theme-500 to-theme-400 hover:from-theme-400 hover:to-theme-300 text-black font-bold font-mono text-sm tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-3 shadow-[0_0_30px_rgba(214,156,23,0.4)]"
+                  className="px-10 py-4 rounded-full bg-white hover:bg-zinc-200 text-black font-bold font-mono text-sm tracking-widest uppercase transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-3 shadow-[0_0_30px_rgba(255,255,255,0.3)]"
                 >
                   Generate Masterpiece <span>✨</span>
                 </button>

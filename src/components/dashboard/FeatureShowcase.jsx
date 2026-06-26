@@ -41,10 +41,10 @@ export default function FeatureShowcase({ showcaseRef, scrollYProgress }) {
         {features.map((feature, index) => (
           <div 
             key={feature.id} 
-            className="h-screen flex shrink-0 items-center justify-center p-8 md:p-24"
+            className="h-screen flex shrink-0 items-center justify-center p-4 md:p-24"
             style={{ width: '100vw' }}
           >
-            <div className="w-full max-w-4xl glass rounded-[3rem] p-12 md:p-20 border border-white/10 shadow-2xl relative overflow-hidden group hover:border-theme-400/30 transition-colors duration-700">
+            <div className="w-full max-w-4xl glass rounded-[2rem] md:rounded-[3rem] p-8 md:p-20 border border-white/10 shadow-2xl relative overflow-hidden group hover:border-theme-400/30 transition-colors duration-700">
               
               {/* Subtle highlight effect */}
               <div className="absolute inset-0 bg-gradient-to-br from-theme-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
