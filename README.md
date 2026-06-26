@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+  <img src="public/favicon.ico" alt="Cadenza Logo" width="100" />
+  <h1>Cadenza</h1>
+  <p><strong>The Ultimate AI-Powered Music Generation Platform</strong></p>
+</div>
 
-## Getting Started
+---
 
-First, run the development server:
+## 🎵 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Cadenza** is a cutting-edge web application designed to empower creators, musicians, and enthusiasts to generate, mix, and produce complete tracks seamlessly. Utilizing advanced LLMs for lyrics and procedural AI algorithms for instrumentals and voice, Cadenza offers an intuitive, professional, and visually stunning "scrollytelling" studio experience.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Whether you are looking to generate a quick beat, write an entire song, or produce a finalized master mix with AI-generated vocals, Cadenza provides the end-to-end creative suite to bring your musical ideas to life.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Key Features
 
-## Learn More
+### 📝 Lyrics Studio
+- **AI Lyric Generation**: Input your seed phrase, genre, mood, and tempo to instantly generate context-aware, structured lyrics (verses, choruses, bridges) using the ultra-fast Groq LLM.
+- **Multilingual Support**: Write hits in English, Spanish, French, Japanese, or Korean.
+- **Interactive Editing**: Fine-tune your AI-generated lyrics line by line.
 
-To learn more about Next.js, take a look at the following resources:
+### 🎹 Instrumental Studio
+- **Procedural Beat Generation**: Select your generated lyrics as a thematic foundation and choose from a variety of instrument stems (Drums, Bass, Synths, Keys, Strings) to procedurally generate a high-quality backing track.
+- **Stem Mixing**: Adjust the quality and apply effects (Reverb, Delay, Chorus, Distortion) to individual stems.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🎤 Voice Studio
+- **Voice FX & Mixing Desk**: Record your own vocals directly in the browser or use the built-in **AI Vocoder** to auto-sing your lyrics.
+- **Master Mix Generation**: Mix your vocal tracks seamlessly with your instrumental beat. Apply professional studio effects like Equalization (EQ), Compression, Pitch Shifting, and Reverb.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🗂️ Dashboard & Catalog
+- **Immersive 3D Experience**: A stunning, interactive Three.js powered dashboard environment.
+- **Asset Management**: View, manage, and delete all your generated lyrics, beats, and final master tracks.
+- **One-Click Export**: Instantly export your Lyrics to professional `.docx` formats, and download your Instrumentals and Final Mixes as high-quality `.mp3` files.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS & Framer Motion for buttery-smooth animations and glassmorphic UI.
+- **3D & Graphics**: Three.js, React Three Fiber, React Three Drei, Postprocessing.
+- **Audio Processing**: Web Audio API, Wavesurfer.js, Lamejs, FFmpeg (WASM).
+- **Backend & Database**: Neon Serverless Postgres, NextAuth.js (Authentication).
+- **AI Integration**: Groq SDK for lightning-fast LLM inference.
+- **File Export**: docx, file-saver.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Kavya-Jain-coder/Cadenza.git
+   cd Cadenza
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Variables:**
+   Create a `.env.local` file in the root directory and configure your environment variables (Neon Database URI, NextAuth Secret, Groq API Key, etc.).
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application in action.
+
+---
+
+## 🎨 UI/UX Highlights
+
+- **Scrollytelling Studios**: Built with `lenis` smooth scrolling and `framer-motion`, guiding users step-by-step through the track creation phases.
+- **Silver/Monochrome Theme**: An ultra-premium, dark-mode focused aesthetic with glassmorphism (backdrop blurs), glowing gradients, and dynamic interactive elements.
+- **Fully Responsive**: Flawless experience across desktop, tablet, and mobile devices.
+
+---
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Kavya-Jain-coder/Cadenza/issues).
+
+---
+
+<div align="center">
+  <p>Built with ❤️ during the Hackathon.</p>
+</div>
