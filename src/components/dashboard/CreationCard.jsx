@@ -5,6 +5,8 @@ import Link from 'next/link';
 import WaveformVisualizer from '../ui/WaveformVisualizer';
 import Button from '../ui/Button';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { saveAs } from 'file-saver';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
 
 export default function CreationCard({ creation, type, onDelete, isSelected, onToggleSelect }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -45,6 +47,66 @@ export default function CreationCard({ creation, type, onDelete, isSelected, onT
       day: 'numeric',
       year: 'numeric'
     });
+  };
+
+  const handleDownloadDocx = async () => {
+    try {
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: creation.title || 'Untitled Lyrics',
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Genre: ${creation.genre || 'N/A'} | Mood: ${creation.mood || 'N/A'}`,
+                  italics: true,
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({ text: "" }),
+            ...(creation.sections || []).flatMap(section => [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `[${(section.type || 'SECTION').toUpperCase()}]`,
+                    bold: true,
+                  })
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: section.content || '',
+                  })
+                ]
+              }),
+              new Paragraph({ text: "" })
+            ])
+          ],
+        }],
+      });
+
+      const blob = await Packer.toBlob(doc);
+      saveAs(blob, `${creation.title || 'Lyrics'}.docx`);
+    } catch (err) {
+      console.error("Error generating docx:", err);
+    }
+  };
+
+  const handleDownloadMp3 = () => {
+    if (creation.audio_url) {
+      saveAs(creation.audio_url, `${type === 'instrumental' ? 'Beat' : 'FinalMix'}_${creation.id.substring(0, 6)}.mp3`);
+    }
   };
 
   const badgeStyles = {
@@ -168,20 +230,52 @@ export default function CreationCard({ creation, type, onDelete, isSelected, onT
           )}
 
           {type === 'track' && (
-            <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-[0.2em]">
-              Ready for Export
-            </span>
+            <button 
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadMp3(); }}
+              className="flex-1 py-3 rounded-xl bg-theme-500 text-white text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-theme-400 transition-colors shadow-[0_0_15px_rgba(var(--dyn-theme-500),0.5)]"
+            >
+              Export MP3
+            </button>
           )}
 
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(creation.id, type); }}
-            className="p-3 rounded-xl text-zinc-500 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all ml-auto"
-            aria-label="Delete creation"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.24 9m4.788 0L9.24 9m4.788 0L9.24 9m12-3h-3.53l-1.07-1.912C15.632 3.262 14.887 2.75 14 2.75h-4c-.887 0-1.632.512-1.93 1.238L6.998 5.75H3.5a.75.75 0 0 0 0 1.5h17a.75.75 0 0 0 0-1.5ZM4.5 19.25A2.25 2.25 0 0 0 6.75 21.5h10.5a2.25 2.25 0 0 0 2.25-2.25V7.5H4.5v11.75Z" />
-            </svg>
-          </button>
+          <div className="flex gap-2 ml-auto">
+            {type === 'lyric' && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadDocx(); }}
+                className="p-3 rounded-xl text-zinc-500 hover:text-theme-400 hover:bg-theme-500/10 border border-transparent hover:border-theme-500/30 transition-all"
+                aria-label="Download DOCX"
+                title="Download as DOCX"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </button>
+            )}
+
+            {(type === 'instrumental' || type === 'track') && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadMp3(); }}
+                className="p-3 rounded-xl text-zinc-500 hover:text-theme-400 hover:bg-theme-500/10 border border-transparent hover:border-theme-500/30 transition-all"
+                aria-label="Download MP3"
+                title="Download as MP3"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </button>
+            )}
+
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(creation.id, type); }}
+              className="p-3 rounded-xl text-zinc-500 hover:text-white hover:bg-red-500/20 border border-transparent hover:border-red-500/30 transition-all"
+              aria-label="Delete creation"
+              title="Delete"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.24 9m4.788 0L9.24 9m4.788 0L9.24 9m12-3h-3.53l-1.07-1.912C15.632 3.262 14.887 2.75 14 2.75h-4c-.887 0-1.632.512-1.93 1.238L6.998 5.75H3.5a.75.75 0 0 0 0 1.5h17a.75.75 0 0 0 0-1.5ZM4.5 19.25A2.25 2.25 0 0 0 6.75 21.5h10.5a2.25 2.25 0 0 0 2.25-2.25V7.5H4.5v11.75Z" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
